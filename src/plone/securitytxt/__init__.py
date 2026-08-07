@@ -1,0 +1,1 @@
+"""Plone security.txt."""
