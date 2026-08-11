@@ -128,6 +128,44 @@ def test_expiry_blocks_publication_without_changing_owner_intent(application):
     )
 
 
+def test_loaded_profile_revision_or_disablement_invalidates_signed_artifact(monkeypatch):
+    from plone.securitytxt import signing
+
+    fingerprint = "A" * 40
+    profile = {
+        "enabled": True,
+        "revision": "1",
+        "gpg": "/usr/bin/gpg",
+        "gnupghome": "/run/securitytxt",
+        "signing_fingerprint": fingerprint,
+    }
+    monkeypatch.setattr(signing, "_PROFILE_CACHE", {"primary": profile})
+
+    class Signer:
+        def sign_and_verify(self, unsigned, profile_id, *, expires):
+            return b"signed artifact", {
+                "profile_revision": "1",
+                "signing_fingerprint": fingerprint,
+            }
+
+    app = SecurityPolicyApplication(
+        record=new_record(), clock=lambda: NOW, signer=Signer(), check_permission=False
+    )
+    saved = app.execute(
+        "save",
+        valid_policy(publication_mode="signed", signing_profile="primary"),
+        expected_revision="1",
+    )
+    app.execute("publish", expected_revision=saved["revision"])
+    endpoint = "https://example.com/.well-known/security.txt"
+    assert app.resolve_publication(endpoint).status == "published"
+
+    profile["enabled"] = False
+    assert app.resolve_publication(endpoint).status == "unavailable"
+    profile.update(enabled=True, revision="2")
+    assert app.resolve_publication(endpoint).status == "unavailable"
+
+
 def test_canonical_matching_normalizes_host_case_idna_and_default_https_port():
     assert canonical_url_matches(
         "https://EXAMPLE.com:443/.well-known/security.txt",
@@ -139,5 +177,9 @@ def test_canonical_matching_normalizes_host_case_idna_and_default_https_port():
     )
     assert not canonical_url_matches(
         "https://example.com/.well-known/security%2Etxt",
+        ["https://example.com/.well-known/security.txt"],
+    )
+    assert not canonical_url_matches(
+        "https://example.com/.well-known/security.txt?spoofed=true",
         ["https://example.com/.well-known/security.txt"],
     )

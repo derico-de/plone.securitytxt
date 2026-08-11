@@ -26,14 +26,22 @@ class TestControlPanelSecurityPolicy:
     def test_controlpanel_view(self):
         """Test control panel view is accessible."""
         from zope.component import getMultiAdapter
+        from zope.interface import alsoProvides
         from zope.publisher.browser import TestRequest
 
+        from plone.app.z3cform.interfaces import IPloneFormLayer
+
         request = TestRequest()
+        alsoProvides(request, IPloneFormLayer)
         view = getMultiAdapter(
             (self.portal, request),
             name="security-policy-controlpanel",
         )
         assert view is not None
+        view.update()
+        assert "Contact" in view.contents
+        assert view.form_instance.preview == ""
+        assert "window.confirm" in view.form_instance.actions["publish"].onclick
 
     def test_policy_is_not_exposed_as_registry_settings(self):
         """Generic registry/control-panel mutation cannot bypass policy rules."""

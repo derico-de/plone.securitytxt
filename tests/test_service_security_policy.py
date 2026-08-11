@@ -83,6 +83,17 @@ def test_mutation_requires_if_match_and_rejects_stale_revisions():
     assert stale.response.status == 412
 
 
+def test_malformed_json_is_rejected_without_erasing_the_draft():
+    request = DummyRequest(body="not an object", **{"If-Match": '"1"'})
+    instance = service(request)
+
+    result = instance.PATCH()
+
+    assert request.response.status == 400
+    assert result["error"]["code"] == "invalid-json"
+    assert instance.application.inspect()["revision"] == "1"
+
+
 def test_preview_is_side_effect_free_and_not_cacheable():
     request = DummyRequest(
         body={

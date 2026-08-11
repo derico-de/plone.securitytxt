@@ -34,6 +34,7 @@ PROFILE_KEYS = {
     "gnupghome",
     "signing_fingerprint",
 }
+_PROFILE_CACHE: dict[str, dict[str, Any]] | None = None
 
 
 class SigningConfigurationError(ValueError):
@@ -89,16 +90,33 @@ def load_signing_profiles(  # noqa: C901 - strict schema is intentionally explic
     return normalized
 
 
-def configured_signer() -> GnuPGSigner | None:
-    """Create a signer lazily for a management command, never for serving."""
+def initialize_profile_cache() -> None:
+    """Load public profile metadata once during process startup."""
+    global _PROFILE_CACHE
     path = os.environ.get(CONFIG_ENVIRONMENT_VARIABLE)
     if not path:
-        return None
+        _PROFILE_CACHE = {}
+        return
     try:
-        profiles = load_signing_profiles(path)
+        _PROFILE_CACHE = load_signing_profiles(path)
     except SigningConfigurationError:
+        _PROFILE_CACHE = {}
+
+
+def signing_profile_metadata(profile_id: str | None) -> dict[str, Any] | None:
+    """Return startup-cached metadata without serving-time file access."""
+    if _PROFILE_CACHE is None:
+        initialize_profile_cache()
+    return (_PROFILE_CACHE or {}).get(profile_id)
+
+
+def configured_signer() -> GnuPGSigner | None:
+    """Create a signer lazily for a management command, never for serving."""
+    if _PROFILE_CACHE is None:
+        initialize_profile_cache()
+    if not _PROFILE_CACHE:
         return None
-    return GnuPGSigner(profiles)
+    return GnuPGSigner(_PROFILE_CACHE)
 
 
 class GnuPGSigner:
@@ -111,10 +129,14 @@ class GnuPGSigner:
 
     def test(self, values):
         profile_id = values.get("signing_profile")
-        self.sign_and_verify(b"plone.securitytxt signing capability probe\r\n", profile_id)
+        self.sign_and_verify(
+            b"plone.securitytxt signing capability probe\r\n",
+            profile_id,
+            expires=values.get("expires"),
+        )
         return {"capability": "verified", "last_error": None, "profile_id": profile_id}
 
-    def sign_and_verify(self, unsigned: bytes, profile_id: str):
+    def sign_and_verify(self, unsigned: bytes, profile_id: str, *, expires: str | None):
         if len(unsigned) > 32 * 1024:
             raise SigningOperationError("input-too-large")
         profile = self.profiles.get(profile_id)
@@ -125,6 +147,7 @@ class GnuPGSigner:
         payload = json.dumps({
             "profile": profile,
             "unsigned": base64.b64encode(unsigned).decode("ascii"),
+            "expires": expires,
         }).encode("utf-8")
         process = subprocess.Popen(  # noqa: S603 - fixed interpreter/module invocation
             [sys.executable, "-m", "plone.securitytxt.signing_helper"],

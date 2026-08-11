@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from zope import schema
+from zope.interface import alsoProvides
 
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
@@ -114,8 +116,21 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
     def update(self):
         self.application = SecurityPolicyApplication(self.context)
         self.management_state = self.application.inspect()
-        self.preview = ""
+        self.diagnostics = self.application.evaluate(self.management_state["values"], preview=True)
+        self.preview = self.diagnostics["preview"]
         super().update()
+
+    def updateActions(self):
+        super(RegistryEditForm, self).updateActions()
+        self.actions["save"].addClass("btn btn-primary")
+        self.actions[
+            "publish"
+        ].onclick = "return window.confirm('Publish this Security Policy at the public endpoint?')"
+        self.actions[
+            "disable"
+        ].onclick = (
+            "return window.confirm('Disable publication and return 404 to anonymous clients?')"
+        )
 
     def getContent(self):
         state = getattr(self, "management_state", None)
@@ -127,7 +142,9 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
         values["extension_fields"] = [
             f"{row['name']}: {row['value']}" for row in values.pop("extensions", [])
         ]
-        return SimpleNamespace(**values)
+        content = SimpleNamespace(**values)
+        alsoProvides(content, ISecurityPolicySettings)
+        return content
 
     def _candidate(self, data):
         candidate = dict(data)
@@ -171,6 +188,7 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
         candidate = self._extract_candidate()
         if candidate is not None:
             result = self.application.evaluate(candidate, preview=False)
+            self.diagnostics = result
             self.status = self._diagnostic_summary(result)
 
     @button.buttonAndHandler("Preview", name="preview")
@@ -178,6 +196,7 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
         candidate = self._extract_candidate()
         if candidate is not None:
             result = self.application.evaluate(candidate, preview=True)
+            self.diagnostics = result
             self.preview = result["preview"]
             self.status = self._diagnostic_summary(result)
             self.request.response.setHeader("Cache-Control", "no-store")
@@ -207,6 +226,7 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
 
 
 class SecurityPolicyControlPanelView(ControlPanelFormWrapper):
-    """Standard Plone control-panel layout wrapper."""
+    """Standard Plone control-panel layout with lifecycle and preview."""
 
     form = SecurityPolicyControlPanelForm
+    index = ViewPageTemplateFile("security_policy.pt")

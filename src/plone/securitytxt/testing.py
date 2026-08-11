@@ -1,9 +1,12 @@
 """Testing setup for plone.securitytxt."""
+
 import os
 
 import plone.app.theming
+import plone.app.z3cform
 import plone.restapi
 import plone.securitytxt
+import plone.z3cform
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
@@ -20,7 +23,9 @@ class PloneSecuritytxtLayer(PloneSandboxLayer):
         # Compile .po -> .mo so add-on translations load during tests.
         os.environ.setdefault("zope_i18n_compile_mo_files", "true")
         self.loadZCML(package=plone.app.theming)
+        self.loadZCML(package=plone.app.z3cform)
         self.loadZCML(package=plone.restapi)
+        self.loadZCML(package=plone.z3cform)
         self.loadZCML(package=plone.securitytxt)
 
     def setUpPloneSite(self, portal):

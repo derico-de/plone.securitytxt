@@ -122,7 +122,13 @@ def _has_control_characters(value: str) -> bool:
 
 
 def _absolute_uri(value: str) -> bool:
-    if not value or _has_control_characters(value):
+    if (
+        not value
+        or _has_control_characters(value)
+        or any(character.isspace() for character in value)
+        or re.search(r"%(?![0-9A-Fa-f]{2})", value)
+        or any(character in '<>"{}|\\^`' for character in value)
+    ):
         return False
     try:
         parsed = urlsplit(value)
@@ -292,7 +298,9 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
             )
         seen_extensions.add(key)
         counts[folded_name] = counts.get(folded_name, 0) + 1
-        if folded_name == "csaf" and not _absolute_uri(value):
+        if folded_name == "csaf" and (
+            not _absolute_uri(value) or urlsplit(value).scheme.casefold() != "https"
+        ):
             errors.append(
                 _diagnostic("extension.csaf-uri", "extensions", "CSAF must contain an HTTPS URI.")
             )
@@ -444,7 +452,14 @@ def _normalized_https_url(value: str) -> tuple[str, str, int | None, str] | None
     try:
         parsed = urlsplit(value)
         hostname = parsed.hostname
-        if parsed.scheme.casefold() != "https" or not hostname:
+        if (
+            parsed.scheme.casefold() != "https"
+            or not hostname
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.query
+            or parsed.fragment
+        ):
             return None
         hostname = hostname.encode("idna").decode("ascii").casefold()
         port = parsed.port
@@ -563,13 +578,7 @@ class SecurityPolicyApplication:
             raise PolicyRevisionError("The Security Policy revision is stale")
 
         if command == "test-signing":
-            signer = self._get_signer()
-            if signer is None:
-                raise PolicyCommandError("Signing support is unavailable")
-            status = signer.test(candidate or dict(self.record["values"]))
-            self.record["signing_status"] = PersistentMapping(status)
-            self.record["revision"] += 1
-            return self._inspect_authorized()
+            return self._execute_signing_test(candidate)
 
         if command == "disable":
             self.record["publication_enabled"] = False
@@ -610,6 +619,18 @@ class SecurityPolicyApplication:
         self.record["revision"] += 1
         return self._inspect_authorized()
 
+    def _execute_signing_test(self, candidate):
+        signer = self._get_signer()
+        if signer is None:
+            raise PolicyCommandError("Signing support is unavailable")
+        try:
+            status = signer.test(candidate or dict(self.record["values"]))
+        except Exception as exc:
+            raise PolicyCommandError("Signing capability test failed") from exc
+        self.record["signing_status"] = PersistentMapping(status)
+        self.record["revision"] += 1
+        return self._inspect_authorized()
+
     def _generate_artifact(
         self, values: dict[str, Any], unsigned: bytes
     ) -> tuple[bytes, dict[str, Any]]:
@@ -628,7 +649,9 @@ class SecurityPolicyApplication:
                 raise PolicyCommandError("Signing support is unavailable")
             try:
                 artifact, signer_binding = signer.sign_and_verify(
-                    unsigned, values["signing_profile"]
+                    unsigned,
+                    values["signing_profile"],
+                    expires=values["expires"],
                 )
             except Exception as exc:
                 raise PolicyCommandError("Signing failed") from exc
@@ -661,7 +684,17 @@ class SecurityPolicyApplication:
         if binding.get("artifact_hash") != sha256(artifact).hexdigest():
             return False
         if values.get("publication_mode") == "signed":
-            return binding.get("profile_id") == values.get("signing_profile")
+            profile_id = values.get("signing_profile")
+            if binding.get("profile_id") != profile_id:
+                return False
+            from plone.securitytxt.signing import signing_profile_metadata
+
+            profile = signing_profile_metadata(profile_id)
+            return profile is None or (
+                profile["enabled"]
+                and binding.get("profile_revision") == profile["revision"]
+                and binding.get("signing_fingerprint") == profile["signing_fingerprint"]
+            )
         return artifact == unsigned
 
     def resolve_publication(self, request_url: str) -> PublicationResult:

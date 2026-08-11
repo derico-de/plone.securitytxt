@@ -14,6 +14,10 @@ from plone.securitytxt.policy import PolicyRevisionError
 from plone.securitytxt.policy import SecurityPolicyApplication
 
 
+class InvalidRequestBody(ValueError):
+    """The REST request body is not a JSON object."""
+
+
 @implementer(IPublishTraverse)
 class SecurityPolicyService(Service):
     """Expose inspect, evaluate, and typed commands without storage CRUD."""
@@ -40,15 +44,23 @@ class SecurityPolicyService(Service):
     def PATCH(self):
         if self.params:
             return self._error(404, "not-found", "Unknown operation.")
-        return self._command("save", self._body())
+        try:
+            body = self._body()
+        except InvalidRequestBody:
+            return self._error(400, "invalid-json", "The body must be a JSON object.")
+        return self._command("save", body)
 
     def POST(self):
         if len(self.params) != 1:
             return self._error(404, "not-found", "Unknown operation.")
+        try:
+            body = self._body()
+        except InvalidRequestBody:
+            return self._error(400, "invalid-json", "The body must be a JSON object.")
         operation = self.params[0]
         if operation == "preview":
             try:
-                result = self.application.evaluate(self._body(), preview=True)
+                result = self.application.evaluate(body, preview=True)
             except PolicyPermissionError:
                 return self._error(403, "forbidden", "Permission denied.")
             self.request.response.setHeader("Cache-Control", "no-store")
@@ -61,8 +73,7 @@ class SecurityPolicyService(Service):
         command = commands.get(operation)
         if command is None:
             return self._error(404, "not-found", "Unknown operation.")
-        body = self._body()
-        candidate = body.get("values") if isinstance(body, dict) else None
+        candidate = body.get("values")
         return self._command(command, candidate)
 
     def _command(self, command, candidate):
@@ -91,6 +102,8 @@ class SecurityPolicyService(Service):
     def _body(self):
         value = getattr(self.request, "json", None)
         if value is not None:
+            if not isinstance(value, dict):
+                raise InvalidRequestBody
             return value
         body = self.request.get("BODY", b"")
         if isinstance(body, bytes):
@@ -99,9 +112,11 @@ class SecurityPolicyService(Service):
             return {}
         try:
             parsed = json.loads(body)
-        except (TypeError, ValueError):
-            return {}
-        return parsed if isinstance(parsed, dict) else {}
+        except (TypeError, ValueError) as exc:
+            raise InvalidRequestBody from exc
+        if not isinstance(parsed, dict):
+            raise InvalidRequestBody
+        return parsed
 
     def _error(self, status, code, message):
         self.request.response.setStatus(status)
