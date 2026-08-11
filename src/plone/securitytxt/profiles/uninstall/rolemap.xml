@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<rolemap>
+  <permissions>
+    <permission name="Manage Security Policy" acquire="True" />
+  </permissions>
+</rolemap>

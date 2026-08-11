@@ -101,7 +101,9 @@ site_api.create(
     {
         "site_id": "SITE_ID",
         "title": "Plone security.txt",
-        "description": "A Plone addon to generate and provide a security.txt for the Plone website.",
+        "description": (
+            "A Plone addon to generate and provide a security.txt for the Plone website."
+        ),
         "default_language": "en",
         "portal_timezone": "UTC",
         "setup_content": False,

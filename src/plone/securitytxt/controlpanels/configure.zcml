@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="plone.securitytxt">
+
+  <browser:page
+      name="security-policy-controlpanel"
+      for="plone.base.interfaces.IPloneSiteRoot"
+      class=".security_policy.SecurityPolicyControlPanelView"
+      permission="plone.securitytxt.ManageSecurityPolicy"
+      />
+
+</configure>

@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
@@ -9,12 +10,20 @@
 
   <include file="permissions.zcml" />
 
+  <browser:page
+      name=".well-known"
+      for="plone.base.interfaces.IPloneSiteRoot"
+      class=".publisher.WellKnownNamespace"
+      permission="zope.Public"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="Plone security.txt"
       description="A Plone addon to generate and provide a security.txt for the Plone website."
       provides="Products.GenericSetup.interfaces.EXTENSION"
       directory="profiles/default"
+      post_handler=".setuphandlers.install"
       />
 
   <genericsetup:registerProfile
@@ -23,13 +32,16 @@
       description="Uninstalls plone.securitytxt"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       directory="profiles/uninstall"
+      post_handler=".setuphandlers.uninstall"
       />
 
-  <genericsetup:importStep
-      name="plone.securitytxt-uninstall"
-      title="Plone security.txt uninstall"
-      description="Uninstall plone.securitytxt"
-      handler="plone.securitytxt.setuphandlers.uninstall"
-      />
+
+  <include package=".controlpanels" />
+
+
+  <include package=".services" />
+
+
+  <include package=".viewlets" />
 
 </configure>

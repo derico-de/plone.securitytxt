@@ -1,5 +1,7 @@
 """Test plone.securitytxt installation."""
+
 import pytest
+
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -19,11 +21,22 @@ class TestSetup:
 
     def test_browserlayer(self):
         """Test browserlayer is registered."""
-        # Add an actual browserlayer check if your addon registers one, e.g.:
-        # from plone.browserlayer import utils
-        # from plone.securitytxt.interfaces import IPloneSecuritytxtLayer
-        # assert IPloneSecuritytxtLayer in utils.registered_layers()
-        assert True
+        from plone.browserlayer import utils
+        from plone.securitytxt.interfaces import IPloneSecuritytxtLayer
+
+        assert IPloneSecuritytxtLayer in utils.registered_layers()
+
+    def test_install_creates_one_empty_draft_record(self):
+        """The default profile initializes authoritative site storage."""
+        from zope.annotation.interfaces import IAnnotations
+
+        from plone.securitytxt.policy import ANNOTATION_KEY
+
+        record = IAnnotations(self.portal)[ANNOTATION_KEY]
+        assert record["format_version"] == 1
+        assert record["publication_enabled"] is False
+        assert record["revision"] == 1
+        assert record["artifact"] == b""
 
 
 class TestUninstall:
@@ -39,3 +52,10 @@ class TestUninstall:
     def test_addon_uninstalled(self):
         """Test addon is uninstalled."""
         assert not self.installer.is_product_installed("plone.securitytxt")
+
+    def test_uninstall_removes_policy_and_artifact(self):
+        from zope.annotation.interfaces import IAnnotations
+
+        from plone.securitytxt.policy import ANNOTATION_KEY
+
+        assert ANNOTATION_KEY not in IAnnotations(self.portal)

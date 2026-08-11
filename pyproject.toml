@@ -20,6 +20,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 keywords = ["Plone", "CMS"]
 
@@ -33,6 +35,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+signing = [
+    "python-gnupg>=0.5.6",
+]
 test = [
     "pytest",
     "pytest-cov",
@@ -71,7 +76,9 @@ zope_setup = true
 [tool.plone.backend_addon.settings.subtemplates]
 content_types = []
 behaviors = []
-services = []
+services = ["@security-policy"]
+controlpanels = ["SecurityPolicy"]
+viewlets = ["securitypolicywarning"]
 
 [tool.plone.project.settings]
 plone_version = "6.2.1"
