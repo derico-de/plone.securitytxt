@@ -48,7 +48,11 @@ def _selected_key_metadata(gpg, fingerprint, required_expiry):
     primary_fingerprint = primary.get("fingerprint", "")
     if len(primary_fingerprint) != 40:
         return None
-    return primary_fingerprint
+    return {
+        "primary_fingerprint": primary_fingerprint,
+        "primary": {key: primary.get(key) for key in ("algo", "length", "cap", "trust", "expires")},
+        "subkey": {key: subkey.get(key) for key in ("algo", "length", "cap", "trust", "expires")},
+    }
 
 
 def _used_sha256(verified):
@@ -79,10 +83,10 @@ def main() -> int:
         if version < (2, 2, 27):
             return 3
         fingerprint = profile["signing_fingerprint"]
-        primary_fingerprint = _selected_key_metadata(
+        key_validity = _selected_key_metadata(
             gpg, fingerprint, _expiry_epoch(payload.get("expires"))
         )
-        if primary_fingerprint is None:
+        if key_validity is None:
             return 4
         signed = gpg.sign(
             unsigned,
@@ -108,8 +112,12 @@ def main() -> int:
             "artifact": base64.b64encode(artifact).decode("ascii"),
             "binding": {
                 "profile_revision": profile["revision"],
-                "primary_fingerprint": primary_fingerprint,
+                "primary_fingerprint": key_validity["primary_fingerprint"],
                 "signing_fingerprint": fingerprint,
+                "key_validity": {
+                    "primary": key_validity["primary"],
+                    "subkey": key_validity["subkey"],
+                },
                 "artifact_hash": sha256(artifact).hexdigest(),
                 "gnupg_version": ".".join(str(part) for part in version),
             },

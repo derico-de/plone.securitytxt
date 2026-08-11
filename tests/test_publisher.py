@@ -101,6 +101,11 @@ def test_conditional_request_is_evaluated_after_publication_qualifies():
     assert body == b""
     assert request.response.headers["ETag"] == etag
 
+    weak_request = Request(**{"If-None-Match": f"W/{etag}"})
+    weak_body = publisher(record, weak_request)()
+    assert weak_request.response.status == 304
+    assert weak_body == b""
+
 
 def test_well_known_namespace_is_registered_and_strict(integration):
     portal = integration["portal"]

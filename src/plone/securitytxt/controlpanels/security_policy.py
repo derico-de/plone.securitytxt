@@ -179,6 +179,8 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
                 expected_revision=self.management_state["revision"],
             )
         except (PolicyCommandError, PolicyRevisionError) as exc:
+            if isinstance(exc, PolicyCommandError) and exc.diagnostics:
+                self.diagnostics = exc.diagnostics
             self.status = str(exc)
             IStatusMessage(self.request).addStatusMessage(str(exc), "error")
             return

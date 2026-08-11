@@ -134,7 +134,7 @@ def test_bcp47_and_canonical_port_validation(application):
 
     rejected = application.evaluate(
         valid_policy(
-            preferred_languages=["en-u"],
+            preferred_languages=["en-u", "en-1901-1901", "en-a-foo-a-bar"],
             canonical=["https://example.com:99999/.well-known/security.txt"],
         )
     )
@@ -142,6 +142,23 @@ def test_bcp47_and_canonical_port_validation(application):
         "preferred_languages.invalid",
         "canonical.uri",
     }
+
+    uri_result = application.evaluate(
+        valid_policy(
+            contact=["foo://example.com"],
+            canonical=["https://:443/.well-known/security.txt"],
+        )
+    )
+    assert {item["code"] for item in uri_result["errors"]} == {
+        "canonical.uri",
+        "canonical.invalid",
+    }
+
+
+def test_invalid_publication_mode_is_not_silently_downgraded(application):
+    result = application.evaluate(valid_policy(publication_mode=False))
+
+    assert {item["code"] for item in result["errors"]} == {"publication_mode.invalid"}
 
 
 def test_signed_mode_cannot_be_saved_with_a_missing_profile(monkeypatch):

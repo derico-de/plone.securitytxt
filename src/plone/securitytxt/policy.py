@@ -147,13 +147,38 @@ def _absolute_uri(value: str) -> bool:
         return False
     if not parsed.scheme or not SCHEME_RE.fullmatch(parsed.scheme):
         return False
-    if parsed.scheme.casefold() in {"http", "https"}:
+    if parsed.netloc:
         try:
+            hostname = parsed.hostname
             _port = parsed.port
         except ValueError:
             return False
-        return parsed.scheme.casefold() == "https" and bool(parsed.netloc)
-    return bool(parsed.path)
+        if not hostname:
+            return False
+    if parsed.scheme.casefold() in {"http", "https"}:
+        return parsed.scheme.casefold() == "https" and bool(parsed.hostname)
+    return bool(parsed.netloc or parsed.path)
+
+
+def _has_duplicate_language_components(tag: str) -> bool:
+    variants: set[str] = set()
+    singletons: set[str] = set()
+    in_extensions = False
+    for component in tag.casefold().split("-")[1:]:
+        if component == "x":
+            break
+        if len(component) == 1:
+            if component in singletons:
+                return True
+            singletons.add(component)
+            in_extensions = True
+        elif not in_extensions and (
+            5 <= len(component) <= 8 or (len(component) == 4 and component[0].isdigit())
+        ):
+            if component in variants:
+                return True
+            variants.add(component)
+    return False
 
 
 def _parse_expiry(value: Any) -> datetime | None:
@@ -252,7 +277,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
     seen_languages: set[str] = set()
     for tag in values["preferred_languages"]:
         folded = tag.casefold()
-        if not LANGUAGE_RE.fullmatch(tag):
+        if not LANGUAGE_RE.fullmatch(tag) or _has_duplicate_language_components(tag):
             errors.append(
                 _diagnostic(
                     "preferred_languages.invalid",
@@ -340,7 +365,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
         )
     values["extensions"] = normalized_extensions
 
-    mode = raw.get("publication_mode", "unsigned") or "unsigned"
+    mode = raw.get("publication_mode", "unsigned")
     if mode not in {"unsigned", "signed"}:
         errors.append(
             _diagnostic(

@@ -83,7 +83,11 @@ class SecurityTxtPublisher:
 
     def _etag_matches(self, etag: str) -> bool:
         value = self.request.getHeader("If-None-Match", "") or ""
-        return value.strip() == "*" or etag in {item.strip() for item in value.split(",")}
+        candidates = {
+            item.strip()[2:] if item.strip().startswith("W/") else item.strip()
+            for item in value.split(",")
+        }
+        return "*" in candidates or etag in candidates
 
     def _error(self, status, body, method, *, allow=False, retry=False):
         response = self.request.response
