@@ -122,15 +122,24 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
 
     def updateActions(self):
         super(RegistryEditForm, self).updateActions()
+        enabled = self.management_state["publication_enabled"]
+        self.actions["save"].title = "Save changes" if enabled else "Save draft"
         self.actions["save"].addClass("btn btn-primary")
-        self.actions[
-            "publish"
-        ].onclick = "return window.confirm('Publish this Security Policy at the public endpoint?')"
-        self.actions[
-            "disable"
-        ].onclick = (
-            "return window.confirm('Disable publication and return 404 to anonymous clients?')"
-        )
+        if enabled:
+            del self.actions["publish"]
+            self.actions[
+                "disable"
+            ].onclick = (
+                "return window.confirm('Disable publication and return 404 to anonymous clients?')"
+            )
+        else:
+            del self.actions["disable"]
+            mode = self.management_state["values"]["publication_mode"]
+            expiry = self.management_state["values"]["expires"] or "the selected expiry"
+            self.actions["publish"].onclick = (
+                "return window.confirm('Publish at /.well-known/security.txt "
+                f"in {mode} mode until {expiry}?')"
+            )
 
     def getContent(self):
         state = getattr(self, "management_state", None)
@@ -214,7 +223,9 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
 
     @button.buttonAndHandler("Test signing", name="test-signing")
     def handleTestSigning(self, action):
-        self._execute("test-signing")
+        candidate = self._extract_candidate()
+        if candidate is not None:
+            self._execute("test-signing", candidate)
 
     @staticmethod
     def _diagnostic_summary(result):

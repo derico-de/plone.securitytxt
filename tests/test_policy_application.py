@@ -128,6 +128,39 @@ def test_expiry_blocks_publication_without_changing_owner_intent(application):
     )
 
 
+def test_bcp47_and_canonical_port_validation(application):
+    accepted = application.evaluate(valid_policy(preferred_languages=["i-klingon", "de-CH-1901"]))
+    assert accepted["errors"] == []
+
+    rejected = application.evaluate(
+        valid_policy(
+            preferred_languages=["en-u"],
+            canonical=["https://example.com:99999/.well-known/security.txt"],
+        )
+    )
+    assert {item["code"] for item in rejected["errors"]} == {
+        "preferred_languages.invalid",
+        "canonical.uri",
+    }
+
+
+def test_signed_mode_cannot_be_saved_with_a_missing_profile(monkeypatch):
+    from plone.securitytxt import signing
+
+    monkeypatch.setattr(signing, "_PROFILE_CACHE", {})
+    app = SecurityPolicyApplication(
+        record=new_record(), clock=lambda: NOW, signer=object(), check_permission=False
+    )
+    with pytest.raises(PolicyCommandError) as error:
+        app.execute(
+            "save",
+            valid_policy(publication_mode="signed", signing_profile="missing"),
+            expected_revision="1",
+        )
+    assert error.value.diagnostics["errors"][0]["code"] == "signing_profile.unavailable"
+    assert app.inspect()["revision"] == "1"
+
+
 def test_loaded_profile_revision_or_disablement_invalidates_signed_artifact(monkeypatch):
     from plone.securitytxt import signing
 

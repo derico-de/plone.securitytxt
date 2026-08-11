@@ -48,9 +48,20 @@ URI_FIELDS = {
 FIRST_CLASS_NAMES = {label.casefold() for _, label in FIELD_ORDER}
 FIELD_NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9-]*$")
 SCHEME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*$")
-# Deliberately rejects grandfathered/irregular tags; the product accepts the
-# ordinary BCP 47 language/script/region/variant forms useful here.
-LANGUAGE_RE = re.compile(r"^(?:[A-Za-z]{2,8})(?:-[A-Za-z0-9]{1,8})*$")
+LANGUAGE_RE = re.compile(
+    r"^(?:"
+    r"(?:[A-Z]{2,3}(?:-[A-Z]{3}){0,3}|[A-Z]{4}|[A-Z]{5,8})"
+    r"(?:-[A-Z]{4})?(?:-(?:[A-Z]{2}|[0-9]{3}))?"
+    r"(?:-(?:[A-Z0-9]{5,8}|[0-9][A-Z0-9]{3}))*"
+    r"(?:-[0-9A-WY-Z](?:-[A-Z0-9]{2,8})+)*"
+    r"(?:-X(?:-[A-Z0-9]{1,8})+)?"
+    r"|X(?:-[A-Z0-9]{1,8})+"
+    r"|I-(?:AMI|Bnn|Default|Enochian|Hak|Klingon|Lux|Mingo|Navajo|Pwn|Tao|Tay|Tsu)"
+    r"|SGN-(?:BE-FR|BE-NL|CH-DE)"
+    r"|ART-LOJBAN|CEL-GAULISH|NO-BOK|NO-NYN|ZH-(?:GUOYU|HAKKA|MIN|MIN-NAN|XIANG)"
+    r")$",
+    re.IGNORECASE,
+)
 
 
 class PolicyError(Exception):
@@ -137,6 +148,10 @@ def _absolute_uri(value: str) -> bool:
     if not parsed.scheme or not SCHEME_RE.fullmatch(parsed.scheme):
         return False
     if parsed.scheme.casefold() in {"http", "https"}:
+        try:
+            _port = parsed.port
+        except ValueError:
+            return False
         return parsed.scheme.casefold() == "https" and bool(parsed.netloc)
     return bool(parsed.path)
 
@@ -549,6 +564,14 @@ class SecurityPolicyApplication:
         warning = (
             enabled and expiry_seconds is not None and expiry_seconds <= WARNING_WINDOW_SECONDS
         )
+        signing = deepcopy(dict(self.record["signing_status"]))
+        binding = self.record.get("artifact_binding", {})
+        signing.update(
+            profile_id=values.get("signing_profile"),
+            profile_revision=binding.get("profile_revision"),
+            primary_fingerprint=binding.get("primary_fingerprint"),
+            signing_fingerprint=binding.get("signing_fingerprint"),
+        )
         return {
             "values": values,
             "revision": str(self.record["revision"]),
@@ -560,7 +583,7 @@ class SecurityPolicyApplication:
             "warnings": diagnostics["warnings"],
             "expiry_seconds": expiry_seconds,
             "show_expiry_warning": warning,
-            "signing": deepcopy(dict(self.record["signing_status"])),
+            "signing": signing,
             "actions": ["save", "validate", "preview", "publish", "disable", "test-signing"],
         }
 
@@ -597,6 +620,7 @@ class SecurityPolicyApplication:
             values = evaluated["values"]
 
         evaluated = validate_policy(values, now=self.clock())
+        self._ensure_signing_selection(values)
         enabling = command == "publish"
         remains_enabled = bool(self.record["publication_enabled"]) or enabling
         if remains_enabled and (evaluated["errors"] or evaluated["blockers"]):
@@ -618,6 +642,29 @@ class SecurityPolicyApplication:
         self.record["etag"] = etag
         self.record["revision"] += 1
         return self._inspect_authorized()
+
+    def _ensure_signing_selection(self, values):
+        if values["publication_mode"] != "signed":
+            return
+        from importlib.util import find_spec
+
+        from plone.securitytxt.signing import signing_profile_metadata
+
+        profile = signing_profile_metadata(values.get("signing_profile"))
+        if (
+            profile is None
+            or not profile["enabled"]
+            or (self.signer is None and find_spec("gnupg") is None)
+        ):
+            diagnostic = _diagnostic(
+                "signing_profile.unavailable",
+                "signing_profile",
+                "Signed Publication Mode requires an available Signing Profile.",
+            )
+            raise PolicyCommandError(
+                "The selected Signing Profile is unavailable",
+                {"errors": [diagnostic], "blockers": [], "warnings": []},
+            )
 
     def _execute_signing_test(self, candidate):
         signer = self._get_signer()

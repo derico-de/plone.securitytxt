@@ -22,6 +22,12 @@
             <dd tal:content="state/expiry_seconds | string:Not set">Not set</dd>
             <dt>Signing capability</dt>
             <dd tal:content="state/signing/capability">unavailable</dd>
+            <tal:identity tal:condition="state/signing/signing_fingerprint">
+              <dt>Primary fingerprint</dt>
+              <dd tal:content="state/signing/primary_fingerprint"></dd>
+              <dt>Signing subkey fingerprint</dt>
+              <dd tal:content="state/signing/signing_fingerprint"></dd>
+            </tal:identity>
           </dl>
         </section>
 

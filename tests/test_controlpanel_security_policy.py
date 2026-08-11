@@ -41,6 +41,8 @@ class TestControlPanelSecurityPolicy:
         view.update()
         assert "Contact" in view.contents
         assert view.form_instance.preview == ""
+        assert view.form_instance.actions["save"].title == "Save draft"
+        assert "disable" not in view.form_instance.actions
         assert "window.confirm" in view.form_instance.actions["publish"].onclick
 
     def test_policy_is_not_exposed_as_registry_settings(self):

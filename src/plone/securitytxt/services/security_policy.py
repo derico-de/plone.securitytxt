@@ -107,7 +107,10 @@ class SecurityPolicyService(Service):
             return value
         body = self.request.get("BODY", b"")
         if isinstance(body, bytes):
-            body = body.decode("utf-8")
+            try:
+                body = body.decode("utf-8")
+            except UnicodeDecodeError as exc:
+                raise InvalidRequestBody from exc
         if not body:
             return {}
         try:

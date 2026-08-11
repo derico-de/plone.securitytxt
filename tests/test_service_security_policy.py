@@ -94,6 +94,18 @@ def test_malformed_json_is_rejected_without_erasing_the_draft():
     assert instance.application.inspect()["revision"] == "1"
 
 
+def test_invalid_utf8_is_a_structured_error():
+    request = DummyRequest(body=None, **{"If-Match": '"1"'})
+    request["BODY"] = b"\xff"
+    instance = service(request)
+
+    result = instance.PATCH()
+
+    assert request.response.status == 400
+    assert result["error"]["code"] == "invalid-json"
+    assert instance.application.inspect()["revision"] == "1"
+
+
 def test_preview_is_side_effect_free_and_not_cacheable():
     request = DummyRequest(
         body={
