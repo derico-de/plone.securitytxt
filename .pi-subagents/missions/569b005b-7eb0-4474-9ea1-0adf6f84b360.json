@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "id": "569b005b-7eb0-4474-9ea1-0adf6f84b360",
+  "title": "Create a concrete, minimal-but-spec-complete implementation plan for the securitytxt control pane...",
+  "objective": "Create a concrete, minimal-but-spec-complete implementation plan for the securitytxt control panel specification in .scratch/securitytxt-control-panel. This is a newly scaffolded Plone 6 add-on. Identify public seams for TDD, recommended module/file structure, plonecli scaffold steps, highest-risk Plone integration details, and an implementation order. Do not edit files. Keep under 1200 words.",
+  "status": "completed",
+  "createdAt": "2026-08-11T15:47:31.636Z",
+  "updatedAt": "2026-08-11T15:48:45.878Z",
+  "runs": [
+    {
+      "runId": "d82cc487-856f-4221-af83-7e2655c4fe52",
+      "mode": "workflow",
+      "asyncDir": "/tmp/pi-subagents-uid-1000/async-subagent-runs/d82cc487-856f-4221-af83-7e2655c4fe52",
+      "status": "complete",
+      "startedAt": "2026-08-11T15:47:31.655Z",
+      "completedAt": "2026-08-11T15:48:45.878Z"
+    }
+  ],
+  "workflowChildren": [
+    {
+      "workflowRunId": "d82cc487-856f-4221-af83-7e2655c4fe52",
+      "key": "implementation-plan",
+      "status": "completed",
+      "startedAt": "2026-08-11T15:47:31.691Z",
+      "updatedAt": "2026-08-11T15:48:45.868Z",
+      "artifactPaths": [
+        "/workspaces/plone.securitytxt/.pi-subagents/artifacts/outputs/ae45c617/.pi-subagents/implementation-plan.md",
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-47-31-698Z_019ff181-ecf2-75ec-a367-bdd001b5777e.jsonl"
+      ],
+      "runId": "ae45c617",
+      "agent": "oracle",
+      "task": "Create a concrete, minimal-but-spec-complete implementation plan for the securitytxt control panel specification in .scratch/securitytxt-control-panel. This is a newly scaffolded Plone 6 add-on. Identify public seams for TDD, recommended module/file structure, plonecli scaffold steps, highest-risk Plone integration details, and an implementation order. Do not edit files. Keep under 1200 words.",
+      "completedAt": "2026-08-11T15:48:45.868Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-47-31-698Z_019ff181-ecf2-75ec-a367-bdd001b5777e.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T15:48:45.868Z",
+        "status": "completed"
+      }
+    }
+  ],
+  "decisions": [],
+  "artifacts": [
+    {
+      "kind": "status",
+      "path": "/tmp/pi-subagents-uid-1000/async-subagent-runs/d82cc487-856f-4221-af83-7e2655c4fe52/status.json"
+    },
+    {
+      "kind": "other",
+      "path": "/tmp/pi-subagents-uid-1000/async-subagent-runs/d82cc487-856f-4221-af83-7e2655c4fe52/events.jsonl",
+      "description": "Lifecycle events"
+    },
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/outputs/ae45c617/.pi-subagents/implementation-plan.md"
+    }
+  ],
+  "receipts": [],
+  "cwd": "/workspaces/plone.securitytxt",
+  "ownerSessionId": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96.jsonl",
+  "summary": "Workflow completed with 1 child run(s). Return: {\n  \"key\": \"implementation-plan\",\n  \"ok\": true,\n  \"agent\": \"oracle\",\n  \"runId\": \"ae45c617\",\n  \"output\": \"# Implementation plan\\n\\n## Inherited decisions\\n\\n- One language-independent Security Policy per Plone site, stored as a versioned site-root annotation—not registry records.\\n- One authoritative application API: `inspect`, `evaluate`, `execute`, and `resolve_publication`.\\n- Drafts may be incomplete; publication requires explicit action and full validation. Published edits replace retained bytes atomically.\\n- Exact unsigned or signed publication bytes, binding, and strong ETag are retained.\\n- Dedicated `plone.securitytxt.ManageSecurityPolicy` permission protects every management path; anonymous access is limited to `/.well-known/security.txt`.\\n- Signing is optional through `[signing]`, deployment-configured, bounded, sign-then-verify, and fail-closed without invalidating an otherwise matching retained artifact.\\n- Classic UI uses one standard `z3c.form`; REST is domain-specific; Trace: 2 event(s)."
+}

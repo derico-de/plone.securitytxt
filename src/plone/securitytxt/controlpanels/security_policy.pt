@@ -1,57 +1,76 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="plone.securitytxt"
       metal:use-macro="context/@@prefs_main_template/macros/master">
   <body>
     <tal:main metal:fill-slot="prefs_configlet_main">
       <header>
-        <h1 tal:content="view/label">Security Policy</h1>
-        <p class="lead" tal:content="view/description"></p>
+        <h1 tal:content="view/label" i18n:translate="">Security Policy</h1>
+        <p class="lead" tal:content="view/description" i18n:translate=""></p>
       </header>
       <div metal:use-macro="context/@@global_statusmessage/macros/portal_message"></div>
 
-      <tal:data tal:define="form view/form_instance;
+      <tal:data tal:define="form python:view.form_instance;
                             state form/management_state;
                             diagnostics form/diagnostics">
-        <section class="security-policy-summary" aria-label="Publication summary">
-          <h2>Publication summary</h2>
+        <section class="security-policy-summary"
+                 aria-label="Publication summary"
+                 i18n:attributes="aria-label">
+          <h2 i18n:translate="">Publication summary</h2>
           <dl>
-            <dt>Lifecycle</dt><dd tal:content="state/lifecycle">draft</dd>
-            <dt>Endpoint status</dt><dd tal:content="state/endpoint_status">404</dd>
-            <dt>Seconds to expiry</dt>
-            <dd tal:content="state/expiry_seconds | string:Not set">Not set</dd>
-            <dt>Signing capability</dt>
-            <dd tal:content="state/signing/capability">unavailable</dd>
+            <dt i18n:translate="">Lifecycle</dt>
+            <dd tal:content="form/lifecycle_label" i18n:translate="">Draft</dd>
+            <dt i18n:translate="">Endpoint status</dt>
+            <dd tal:content="state/endpoint_status">404</dd>
+            <dt i18n:translate="">Endpoint URL</dt>
+            <dd>
+              <a tal:attributes="href form/publication_url"
+                 tal:content="form/publication_url">Open security.txt</a>
+            </dd>
+            <dt i18n:translate="">Seconds to expiry</dt>
+            <dd tal:content="form/expiry_label" i18n:translate="">Not set</dd>
+            <dt i18n:translate="">Signing capability</dt>
+            <dd tal:content="form/signing_capability_label" i18n:translate="">Unavailable</dd>
             <tal:identity tal:condition="state/signing/signing_fingerprint">
-              <dt>Primary fingerprint</dt>
+              <dt i18n:translate="">Primary fingerprint</dt>
               <dd tal:content="state/signing/primary_fingerprint"></dd>
-              <dt>Signing subkey fingerprint</dt>
+              <dt i18n:translate="">Signing subkey fingerprint</dt>
               <dd tal:content="state/signing/signing_fingerprint"></dd>
             </tal:identity>
           </dl>
         </section>
 
         <section tal:condition="python: diagnostics['errors'] or diagnostics['blockers'] or diagnostics['warnings']"
-                 class="security-policy-diagnostics" aria-label="Validation summary">
-          <h2>Validation</h2>
+                 class="security-policy-diagnostics"
+                 aria-label="Validation summary"
+                 i18n:attributes="aria-label">
+          <h2 i18n:translate="">Validation</h2>
           <ul>
             <li tal:repeat="item diagnostics/errors">
-              <strong>Blocks saving:</strong> <span tal:replace="item/message"></span>
+              <strong i18n:translate="">Blocks saving:</strong>
+              <span tal:replace="item/message"></span>
             </li>
             <li tal:repeat="item diagnostics/blockers">
-              <strong>Blocks publication:</strong> <span tal:replace="item/message"></span>
+              <strong i18n:translate="">Blocks publication:</strong>
+              <span tal:replace="item/message"></span>
             </li>
             <li tal:repeat="item diagnostics/warnings">
-              <strong>Warning:</strong> <span tal:replace="item/message"></span>
+              <strong i18n:translate="">Warning:</strong>
+              <span tal:replace="item/message"></span>
             </li>
           </ul>
         </section>
 
         <div id="content-core"><span tal:replace="structure view/contents"></span></div>
 
-        <section class="security-policy-preview" aria-label="Unsigned preview">
-          <h2>Generated unsigned preview</h2>
-          <p tal:condition="python: state['values']['publication_mode'] == 'signed'">
+        <section class="security-policy-preview"
+                 aria-label="Unsigned preview"
+                 i18n:attributes="aria-label">
+          <h2 i18n:translate="">Generated unsigned preview</h2>
+          <p tal:condition="python: state['values']['publication_mode'] == 'signed'"
+             i18n:translate="">
             Signed Publication Mode is selected. This non-public preview remains unsigned.
           </p>
           <pre tal:content="form/preview">No preview is available.</pre>

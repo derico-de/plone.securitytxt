@@ -1,0 +1,350 @@
+# German translations for plone.securitytxt.
+msgid ""
+msgstr ""
+"Project-Id-Version: plone.securitytxt\n"
+"POT-Creation-Date: 2026-08-13 17:07+0000\n"
+"PO-Revision-Date: 2026-08-13 17:05+0000\n"
+"Last-Translator: plone.securitytxt contributors\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Code: de\n"
+"Language-Name: Deutsch\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone.securitytxt\n"
+"Language: de\n"
+
+#: ../../securitytxt/controlpanels/security_policy.py:334
+msgid "${errors} errors, ${blockers} publication blockers, ${warnings} warnings."
+msgstr "${errors} Fehler, ${blockers} Veröffentlichungshindernisse, ${warnings} Warnungen."
+
+#: ../../securitytxt/configure.zcml:27
+msgid "A Plone addon to generate and provide a security.txt for the Plone website."
+msgstr "Eine Plone-Erweiterung zum Erzeugen und Bereitstellen einer security.txt für die Plone-Website."
+
+#: ../../securitytxt/controlpanels/security_policy.py:112
+msgid "Acknowledgments"
+msgstr "Danksagungen"
+
+#: ../../securitytxt/controlpanels/security_policy.py:117
+msgid "Acknowledgments URI"
+msgstr "Danksagungs-URI"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:56
+msgid "Blocks publication:"
+msgstr "Verhindert die Veröffentlichung:"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:52
+msgid "Blocks saving:"
+msgstr "Verhindert das Speichern:"
+
+#: ../../securitytxt/controlpanels/security_policy.py:96
+msgid "Canonical"
+msgstr "Kanonische URL"
+
+#: ../../securitytxt/controlpanels/security_policy.py:102
+msgid "Canonical HTTPS URL"
+msgstr "Kanonische HTTPS-URL"
+
+#: ../../securitytxt/controlpanels/security_policy.py:145
+msgid "Choose unsigned output or output signed by a configured profile."
+msgstr "Wählen Sie eine unsignierte Ausgabe oder eine mit einem konfigurierten Profil signierte Ausgabe."
+
+#: ../../securitytxt/controlpanels/security_policy.py:88
+msgid "Comma-separated BCP 47 language tags, in preference order. Common values: en (English), de (German), de-CH (German as used in Switzerland), or fr (French). Example: en, de-CH"
+msgstr "Kommagetrennte BCP-47-Sprachkennzeichnungen in bevorzugter Reihenfolge. Häufige Werte: en (Englisch), de (Deutsch), de-CH (Deutsch in der Schweiz) oder fr (Französisch). Beispiel: de, en"
+
+#: ../../securitytxt/controlpanels/security_policy.py:41
+msgid "Configured"
+msgstr "Konfiguriert"
+
+#: ../../securitytxt/controlpanels/security_policy.py:71
+msgid "Contact"
+msgstr "Kontakt"
+
+#: ../../securitytxt/controlpanels/security_policy.py:51
+msgid "Contact & expiry"
+msgstr "Kontakt und Ablauf"
+
+#: ../../securitytxt/controlpanels/security_policy.py:76
+msgid "Contact URI"
+msgstr "Kontakt-URI"
+
+#: ../../securitytxt/controlpanels/security_policy.py:152
+msgid "Deployment-owned profile identifier. Example: production-security-key"
+msgstr "Von der Bereitstellung verwaltete Profilkennung. Beispiel: production-security-key"
+
+#: ../../securitytxt/controlpanels/security_policy.py:322
+msgid "Disable publication"
+msgstr "Veröffentlichung deaktivieren"
+
+#: ../../securitytxt/controlpanels/security_policy.py:213
+msgid "Disable publication and return 404 to anonymous clients?"
+msgstr "Veröffentlichung deaktivieren und anonymen Clients den Status 404 zurückgeben?"
+
+#: ../../securitytxt/controlpanels/security_policy.py:56
+msgid "Disclosure"
+msgstr "Offenlegung"
+
+#: ../../securitytxt/controlpanels/security_policy.py:35
+msgid "Draft"
+msgstr "Entwurf"
+
+#: ../../securitytxt/controlpanels/security_policy.py:106
+msgid "Encryption"
+msgstr "Verschlüsselung"
+
+#: ../../securitytxt/controlpanels/security_policy.py:108
+msgid "Encryption URI"
+msgstr "Verschlüsselungs-URI"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:27
+msgid "Endpoint URL"
+msgstr "Endpunkt-URL"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:25
+msgid "Endpoint status"
+msgstr "Endpunktstatus"
+
+#: ../../securitytxt/controlpanels/security_policy.py:80
+msgid "Expires"
+msgstr "Gültig bis"
+
+#: ../../securitytxt/controlpanels/security_policy.py:140
+msgid "Extension field"
+msgstr "Erweiterungsfeld"
+
+#: ../../securitytxt/controlpanels/security_policy.py:61
+msgid "Extension fields"
+msgstr "Erweiterungsfelder"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:71
+msgid "Generated unsigned preview"
+msgstr "Erzeugte unsignierte Vorschau"
+
+#: ../../securitytxt/controlpanels/security_policy.py:129
+msgid "Hiring"
+msgstr "Stellenangebote"
+
+#: ../../securitytxt/controlpanels/security_policy.py:131
+msgid "Hiring URI"
+msgstr "Stellenangebots-URI"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:23
+msgid "Lifecycle"
+msgstr "Lebenszyklus"
+
+#: ../../securitytxt/controlpanels/security_policy.py:165
+msgid "Manage the site-wide security.txt policy"
+msgstr "Website-weite security.txt-Richtlinie verwalten"
+
+#: ../../securitytxt/controlpanels/security_policy.py:179
+msgid "Not set"
+msgstr "Nicht festgelegt"
+
+#: ../../securitytxt/controlpanels/security_policy.py:136
+msgid "One Field-Name: value row per line. Examples: Bug-Bounty: True or CSAF: https://example.com/.well-known/csaf/provider-metadata.json"
+msgstr "Eine Zeile im Format Feldname: Wert pro Eintrag. Beispiele: Bug-Bounty: True oder CSAF: https://example.com/.well-known/csaf/provider-metadata.json"
+
+#: ../../securitytxt/controlpanels/security_policy.py:113
+msgid "One acknowledgments URI per line. Example: https://example.com/security/acknowledgments"
+msgstr "Eine URI für Danksagungen pro Zeile. Beispiel: https://example.com/security/acknowledgments"
+
+#: ../../securitytxt/controlpanels/security_policy.py:72
+msgid "One contact URI per line, in preference order. Examples: mailto:security@example.com or https://example.com/security/contact"
+msgstr "Eine Kontakt-URI pro Zeile in bevorzugter Reihenfolge. Beispiele: mailto:security@example.com oder https://example.com/security/contact"
+
+#: ../../securitytxt/controlpanels/security_policy.py:107
+msgid "One encryption-key URI per line. Example: https://example.com/pgp-key.txt"
+msgstr "Eine URI für den Verschlüsselungsschlüssel pro Zeile. Beispiel: https://example.com/pgp-key.txt"
+
+#: ../../securitytxt/controlpanels/security_policy.py:130
+msgid "One security-jobs URI per line. Example: https://example.com/security/jobs"
+msgstr "Eine URI für Stellenangebote im Sicherheitsbereich pro Zeile. Beispiel: https://example.com/security/jobs"
+
+#: ../../securitytxt/controlpanels/security_policy.py:122
+msgid "One security-policy URI per line. Example: https://example.com/security/policy"
+msgstr "Eine URI für die Sicherheitsrichtlinie pro Zeile. Beispiel: https://example.com/security/policy"
+
+#: ../../securitytxt/configure.zcml:27
+msgid "Plone security.txt"
+msgstr "Plone security.txt"
+
+#: ../../securitytxt/configure.zcml:36
+msgid "Plone security.txt (uninstall)"
+msgstr "Plone security.txt (deinstallieren)"
+
+#: ../../securitytxt/controlpanels/security_policy.py:121
+msgid "Policy"
+msgstr "Richtlinie"
+
+#: ../../securitytxt/controlpanels/security_policy.py:125
+msgid "Policy URI"
+msgstr "Richtlinien-URI"
+
+#: ../../securitytxt/controlpanels/security_policy.py:87
+msgid "Preferred languages"
+msgstr "Bevorzugte Sprachen"
+
+#: ../../securitytxt/controlpanels/security_policy.py:305
+msgid "Preview"
+msgstr "Vorschau"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:37
+msgid "Primary fingerprint"
+msgstr "Primärer Fingerabdruck"
+
+#: ../../securitytxt/controlpanels/security_policy.py:37
+msgid "Publication blocked"
+msgstr "Veröffentlichung blockiert"
+
+#: ../../securitytxt/controlpanels/security_policy.py:144
+msgid "Publication mode"
+msgstr "Veröffentlichungsmodus"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:18
+msgid "Publication summary"
+msgstr "Veröffentlichungsübersicht"
+
+#: ../../securitytxt/controlpanels/security_policy.py:315
+msgid "Publish"
+msgstr "Veröffentlichen"
+
+#: ../../securitytxt/controlpanels/security_policy.py:225
+msgid "Publish at ${url} in ${mode} mode until ${expiry}?"
+msgstr "Unter ${url} im Modus ${mode} bis ${expiry} veröffentlichen?"
+
+#: ../../securitytxt/controlpanels/security_policy.py:36
+msgid "Published"
+msgstr "Veröffentlicht"
+
+#: ../../securitytxt/viewlets/security_policy_warning.pt:9
+msgid "Review policy"
+msgstr "Richtlinie prüfen"
+
+#: ../../securitytxt/controlpanels/security_policy.py:208
+msgid "Save changes"
+msgstr "Änderungen speichern"
+
+#: ../../securitytxt/controlpanels/security_policy.py:208
+msgid "Save draft"
+msgstr "Entwurf speichern"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:32
+msgid "Seconds to expiry"
+msgstr "Sekunden bis zum Ablauf"
+
+#: ../../securitytxt/controlpanels/security_policy.py:164
+#: ../../securitytxt/profiles/default/controlpanel.xml
+msgid "Security Policy"
+msgstr "Sicherheitsrichtlinie"
+
+#: ../../securitytxt/controlpanels/security_policy.py:288
+msgid "Security Policy updated."
+msgstr "Sicherheitsrichtlinie wurde aktualisiert."
+
+#: ../../securitytxt/viewlets/security_policy_warning.pt:7
+msgid "Security Policy:"
+msgstr "Sicherheitsrichtlinie:"
+
+#: ../../securitytxt/controlpanels/security_policy.py:81
+msgid "Select the expiration date and time. Example: December 31, 2027 at 23:59 UTC"
+msgstr "Wählen Sie Ablaufdatum und -uhrzeit. Beispiel: 31. Dezember 2027 um 23:59 UTC"
+
+#: ../../securitytxt/controlpanels/security_policy.py:32
+msgid "Signed"
+msgstr "Signiert"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:72
+msgid "Signed Publication Mode is selected. This non-public preview remains unsigned."
+msgstr "Der signierte Veröffentlichungsmodus ist ausgewählt. Diese nicht öffentliche Vorschau bleibt unsigniert."
+
+#: ../../securitytxt/controlpanels/security_policy.py:66
+msgid "Signing"
+msgstr "Signierung"
+
+#: ../../securitytxt/controlpanels/security_policy.py:151
+msgid "Signing Profile"
+msgstr "Signaturprofil"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:34
+msgid "Signing capability"
+msgstr "Signaturfähigkeit"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:39
+msgid "Signing subkey fingerprint"
+msgstr "Fingerabdruck des Signatur-Unterschlüssels"
+
+#: ../../securitytxt/controlpanels/security_policy.py:326
+msgid "Test signing"
+msgstr "Signierung testen"
+
+#: ../../securitytxt/viewlets/security_policy_warning.py:26
+msgid "The Security Policy expires in ${days} days."
+msgstr "Die Sicherheitsrichtlinie läuft in ${days} Tagen ab."
+
+#: ../../securitytxt/controlpanels/security_policy.py:193
+msgid "The official URL where this security.txt is published must use HTTPS. Canonical requires a public HTTPS URL, but this site is currently using HTTP: ${url}. Leave Canonical blank for unsigned local testing, or configure public HTTPS first."
+msgstr "Die offizielle URL, unter der diese security.txt veröffentlicht wird, muss HTTPS verwenden. Die kanonische URL erfordert eine öffentliche HTTPS-URL, aber diese Website verwendet derzeit HTTP: ${url}. Lassen Sie die kanonische URL für lokale unsignierte Tests leer oder konfigurieren Sie zuerst öffentliches HTTPS."
+
+#: ../../securitytxt/controlpanels/security_policy.py:186
+msgid "The official URL where this security.txt is published. Enter one HTTPS URL per line; each must end with /.well-known/security.txt and have no query or fragment. Copy this site's URL: ${url}"
+msgstr "Die offizielle URL, unter der diese security.txt veröffentlicht wird. Geben Sie eine HTTPS-URL pro Zeile ein; jede muss mit /.well-known/security.txt enden und darf weder Abfrage noch Fragment enthalten. URL dieser Website zum Kopieren: ${url}"
+
+#: ../../securitytxt/controlpanels/security_policy.py:97
+msgid "The official URL where this security.txt is published. Enter one HTTPS URL per line; each must end with /.well-known/security.txt and have no query or fragment. Usually use your site's own URL."
+msgstr "Die offizielle URL, unter der diese security.txt veröffentlicht wird. Geben Sie eine HTTPS-URL pro Zeile ein; jede muss mit /.well-known/security.txt enden und darf weder Abfrage noch Fragment enthalten. Verwenden Sie normalerweise die URL Ihrer eigenen Website."
+
+#: ../../securitytxt/viewlets/security_policy_warning.py:23
+msgid "The published Security Policy has expired."
+msgstr "Die veröffentlichte Sicherheitsrichtlinie ist abgelaufen."
+
+#: ../../securitytxt/controlpanels/security_policy.py:40
+msgid "Unavailable"
+msgstr "Nicht verfügbar"
+
+#: ../../securitytxt/configure.zcml:36
+msgid "Uninstalls plone.securitytxt"
+msgstr "Deinstalliert plone.securitytxt"
+
+#: ../../securitytxt/controlpanels/security_policy.py:31
+msgid "Unsigned"
+msgstr "Unsigniert"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:68
+msgid "Unsigned preview"
+msgstr "Unsignierte Vorschau"
+
+#: ../../securitytxt/controlpanels/security_policy.py:297
+msgid "Validate"
+msgstr "Validieren"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:49
+msgid "Validation"
+msgstr "Validierung"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:45
+msgid "Validation summary"
+msgstr "Validierungsübersicht"
+
+#: ../../securitytxt/controlpanels/security_policy.py:42
+msgid "Verified"
+msgstr "Verifiziert"
+
+#: ../../securitytxt/controlpanels/security_policy.pt:60
+msgid "Warning:"
+msgstr "Warnung:"
+
+#: ../../securitytxt/controlpanels/security_policy.py:223
+msgid "signed"
+msgstr "signiert"
+
+#: ../../securitytxt/controlpanels/security_policy.py:221
+msgid "the selected expiry"
+msgstr "zum ausgewählten Ablaufzeitpunkt"
+
+#: ../../securitytxt/controlpanels/security_policy.py:223
+msgid "unsigned"
+msgstr "unsigniert"

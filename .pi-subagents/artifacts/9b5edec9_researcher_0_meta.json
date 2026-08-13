@@ -1,0 +1,138 @@
+{
+  "runId": "9b5edec9",
+  "agent": "researcher",
+  "task": "Research primary-source facts needed to decide release acceptance for plone.securitytxt in /workspaces/plone.securitytxt. Determine, as of 2026-08-10, the maintained Plone 6 minor lines and their supported Python versions; identify suitable oldest/current Plone and Python combinations for CI given the map promise Plone 6.0+; check authoritative Plone release schedules/configs and package metadata rather than secondary posts. Also identify primary-source interoperability tools or commands suitable for validating RFC 9116 output and OpenPGP clear-signatures, and supported minimum/current GnuPG test targets consistent with the already-decided GnuPG >=2.2.27 Linux contract. Separate facts from recommendations and note uncertainties. Read .scratch/securitytxt-control-panel/map.md, issues 01, 03, 06, 07, 08, pyproject.toml, and .github/workflows/ci.yml. Write one linked Markdown research asset at .scratch/securitytxt-control-panel/research/release-compatibility.md with source URLs. Do not modify any other project file. Return a concise summary and the file path. The parent owns all product decisions and tracker edits.\n\n---\n**Output:**\nWrite your findings to exactly this path: /workspaces/plone.securitytxt/.pi-subagents/artifacts/outputs/9b5edec9/research.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 1,
+  "processSignal": "SIGTERM",
+  "usage": {
+    "input": 31843,
+    "output": 7426,
+    "cacheRead": 120832,
+    "cacheWrite": 0,
+    "cost": 0.44241100000000005,
+    "turns": 9
+  },
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "attemptedModels": [
+    "openai-codex/gpt-5.6-sol:medium"
+  ],
+  "modelAttempts": [
+    {
+      "model": "openai-codex/gpt-5.6-sol:medium",
+      "success": false,
+      "exitCode": 1,
+      "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+      "usage": {
+        "input": 31843,
+        "output": 7426,
+        "cacheRead": 120832,
+        "cacheWrite": 0,
+        "cost": 0.44241100000000005,
+        "turns": 9
+      }
+    }
+  ],
+  "durationMs": 181279,
+  "toolCount": 39,
+  "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+  "launchContractDigest": "71329394746ed2dae52861a26e77b85a1a4e056a28629636e07ee5f7775b8840",
+  "launchResolvedExtensions": {
+    "version": 1,
+    "source": "launch-resolved",
+    "disableAmbientExtensions": false,
+    "runtime": [
+      "sha256:49e048d05a5c5d6f"
+    ],
+    "configured": [],
+    "effective": [
+      "sha256:49e048d05a5c5d6f"
+    ],
+    "omitted": {
+      "runtime": 0,
+      "configured": 0,
+      "effective": 0
+    }
+  },
+  "acceptance": {
+    "status": "attested",
+    "evidenceStatus": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Research includes severity-ranked findings with repository paths, primary-source links, and residual risks."
+        }
+      ],
+      "changedFiles": [
+        ".pi-subagents/artifacts/outputs/9b5edec9/research.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "Repository review and primary-source web research",
+          "result": "passed",
+          "summary": "Reviewed all requested files and researched Plone, RFC 9116, GnuPG, and interoperability sources."
+        }
+      ],
+      "validationOutput": [
+        "Facts, recommendations, uncertainties, and release risks are separated."
+      ],
+      "residualRisks": [
+        "Release schedules require rechecking immediately before release.",
+        "The meaning of compatibility with historical Plone 6.0.0 remains a product decision."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Added only the authoritative research artifact.",
+      "reviewFindings": [
+        "high: .github/workflows/ci.yml - unconstrained Plone installation does not prove Plone 6.0+ minor-line compatibility.",
+        "medium: .github/workflows/ci.yml - Python 3.13/3.14 boundary coverage is absent.",
+        "medium: GnuPG 2.2.27 is acceptable only through a vendor-security-supported package."
+      ],
+      "manualNotes": "The runtime override required the artifact path above rather than the requested .scratch path."
+    }
+  },
+  "transcriptPath": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/9b5edec9_researcher_0_transcript.jsonl",
+  "timestamp": 1786359943851
+}

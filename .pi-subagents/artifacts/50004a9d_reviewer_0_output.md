@@ -1,0 +1,4 @@
+## Review
+- **High — `src/plone/securitytxt/policy.py:343-352`:** Falsy, wrongly typed `publication_mode` values are silently converted to `"unsigned"`. A published signed policy submitted with `false` can therefore be republished unsigned instead of rejected, unintentionally removing signature protection.
+- **Medium — `src/plone/securitytxt/policy.py:55-56`:** The BCP 47 regex accepts duplicate variants and singleton extensions. Verified `en-1901-1901` and `en-a-foo-a-bar` produce no validation error despite RFC 5646 prohibiting duplicates.
+- **Low — `src/plone/securitytxt/publisher.py:84-86`:** `If-None-Match` uses exact string comparison and does not perform the required weak comparison; `W/"etag"` incorrectly returns `200` rather than `304`.

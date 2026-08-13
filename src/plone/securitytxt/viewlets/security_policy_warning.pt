@@ -1,11 +1,11 @@
 <tal:viewlet xmlns:tal="http://xml.zope.org/namespaces/tal"
              xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-             i18n_domain="plone.securitytxt">
+             i18n:domain="plone.securitytxt">
   <div tal:condition="view/available"
        class="security-policy-expiry-warning portalMessage warning"
        role="alert">
     <strong i18n:translate="">Security Policy:</strong>
-    <span tal:content="view/message">The Security Policy is expiring.</span>
+    <span tal:content="view/message" i18n:translate="">The Security Policy is expiring.</span>
     <a tal:attributes="href view/review_url" i18n:translate="">Review policy</a>
   </div>
 </tal:viewlet>

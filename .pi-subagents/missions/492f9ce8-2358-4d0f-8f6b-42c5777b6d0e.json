@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "492f9ce8-2358-4d0f-8f6b-42c5777b6d0e",
+  "title": "Research security.txt baseline",
+  "objective": "Resolve the wayfinder research ticket Establish the security.txt standards baseline with a cited primary-source asset.",
+  "status": "completed",
+  "createdAt": "2026-08-08T09:10:27.693Z",
+  "updatedAt": "2026-08-08T09:30:10.772Z",
+  "runs": [
+    {
+      "runId": "call_7wAlliWO3H71Y3HXpjvyt1E0|fc_08b79d1c377cb3bb016a76f27c3b20819189cdc273d6e66a8a",
+      "mode": "external",
+      "asyncDir": "/tmp/pi-subagents-uid-1000/async-subagent-runs/call_7wAlliWO3H71Y3HXpjvyt1E0|fc_08b79d1c377cb3bb016a76f27c3b20819189cdc273d6e66a8a",
+      "status": "failed",
+      "startedAt": "2026-08-08T09:10:27.697Z",
+      "completedAt": "2026-08-08T09:15:17.285Z"
+    }
+  ],
+  "decisions": [],
+  "artifacts": [
+    {
+      "kind": "status",
+      "path": "/tmp/pi-subagents-uid-1000/async-subagent-runs/call_7wAlliWO3H71Y3HXpjvyt1E0|fc_08b79d1c377cb3bb016a76f27c3b20819189cdc273d6e66a8a/status.json"
+    },
+    {
+      "kind": "other",
+      "path": "/tmp/pi-subagents-uid-1000/async-subagent-runs/call_7wAlliWO3H71Y3HXpjvyt1E0|fc_08b79d1c377cb3bb016a76f27c3b20819189cdc273d6e66a8a/events.jsonl",
+      "description": "Lifecycle events"
+    },
+    {
+      "kind": "output",
+      "path": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-07T19-13-49-746Z_019fdda5-5cb2-72a1-9192-7e891dbf0c3f/7e872312/run-0/session.jsonl"
+    }
+  ],
+  "receipts": [],
+  "cwd": "/workspaces/plone.securitytxt",
+  "ownerSessionId": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-07T19-13-49-746Z_019fdda5-5cb2-72a1-9192-7e891dbf0c3f.jsonl",
+  "summary": "Resolved Establish the security.txt standards baseline with a parent-verified primary-source research asset, closed the local ticket, and updated the wayfinder map."
+}

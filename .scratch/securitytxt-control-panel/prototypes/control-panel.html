@@ -1,0 +1,326 @@
+<!-- PROTOTYPE ONLY — Three control-panel variants, switchable via ?variant=A|B|C. -->
+<style>
+  * { box-sizing: border-box; }
+  .prototype { font: 14px/1.45 var(--font-sans); color: var(--color-text-primary); }
+  .prototype button, .prototype input, .prototype select, .prototype textarea { font: inherit; }
+  .prototype h1, .prototype h2, .prototype h3, .prototype p { margin-top: 0; }
+  .prototype h1 { font-size: 22px; margin-bottom: 4px; }
+  .prototype h2 { font-size: 17px; margin-bottom: 8px; }
+  .prototype h3 { font-size: 14px; margin-bottom: 5px; }
+  .muted { color: var(--color-text-secondary); }
+  .tiny { color: var(--color-text-tertiary); font-size: 12px; }
+  .mono { font-family: var(--font-mono); }
+  .app-shell { border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; background: var(--color-background-primary); }
+  .admin-bar { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; background: var(--color-background-tertiary); border-bottom: 1px solid var(--color-border-tertiary); font-size: 12px; }
+  .site-head { padding: 13px 16px; border-bottom: 1px solid var(--color-border-tertiary); display: flex; justify-content: space-between; align-items: center; }
+  .site-name { font-size: 17px; font-weight: 500; }
+  .crumbs { color: var(--color-text-secondary); font-size: 12px; }
+  .expiry-alert { display: none; padding: 11px 15px; gap: 10px; align-items: flex-start; background: var(--color-background-warning); color: var(--color-text-warning); border-bottom: 1px solid var(--color-border-warning); }
+  .expiry-alert.show { display: flex; }
+  .expiry-alert strong { font-weight: 500; }
+  .page { padding: 18px; }
+  .page-title { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
+  .status-line { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+  .badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid var(--color-border-secondary); border-radius: 999px; font-size: 12px; background: var(--color-background-secondary); }
+  .badge.ok { color: var(--color-text-success); border-color: var(--color-border-success); background: var(--color-background-success); }
+  .badge.warn { color: var(--color-text-warning); border-color: var(--color-border-warning); background: var(--color-background-warning); }
+  .badge.bad { color: var(--color-text-danger); border-color: var(--color-border-danger); background: var(--color-background-danger); }
+  .card { border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px; background: var(--color-background-primary); }
+  .card + .card { margin-top: 12px; }
+  .card-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+  .stack { display: grid; gap: 12px; }
+  .field { display: grid; gap: 5px; }
+  .field label { font-weight: 500; }
+  .field input, .field select, .field textarea { width: 100%; }
+  .field textarea { min-height: 62px; resize: vertical; }
+  .help { color: var(--color-text-tertiary); font-size: 12px; }
+  .error-text { color: var(--color-text-danger); font-size: 12px; }
+  .warning-text { color: var(--color-text-warning); font-size: 12px; }
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+  .extension-row { display: grid; grid-template-columns: minmax(120px,.65fr) 1.35fr auto; gap: 8px; margin-bottom: 8px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .primary { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .danger { color: var(--color-text-danger); border-color: var(--color-border-danger); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .message { border-left: 3px solid var(--color-border-secondary); padding: 8px 10px; background: var(--color-background-secondary); }
+  .message.error { border-color: var(--color-border-danger); background: var(--color-background-danger); color: var(--color-text-danger); }
+  .message.warning { border-color: var(--color-border-warning); background: var(--color-background-warning); color: var(--color-text-warning); }
+  .message.success { border-color: var(--color-border-success); background: var(--color-background-success); color: var(--color-text-success); }
+  .preview { margin: 0; padding: 12px; min-height: 190px; overflow: auto; white-space: pre-wrap; font: 12px/1.55 var(--font-mono); color: var(--color-text-primary); background: var(--color-background-secondary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); }
+  .rest-state { margin: 0; max-height: 250px; overflow: auto; white-space: pre-wrap; font: 11px/1.5 var(--font-mono); color: var(--color-text-secondary); }
+  .section-nav { display: grid; gap: 3px; }
+  .section-nav button { text-align: left; border-color: transparent; background: transparent; }
+  .section-nav button.active { border-color: var(--color-border-primary); background: var(--color-background-secondary); }
+  .metric { padding: 10px; border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); }
+  .metric b { display: block; font-size: 16px; font-weight: 500; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li { display: grid; grid-template-columns: 25px 1fr; gap: 9px; padding: 9px 0; border-bottom: 1px solid var(--color-border-tertiary); }
+  .checklist li:last-child { border-bottom: 0; }
+  .check { width: 22px; height: 22px; display: grid; place-items: center; border: 1px solid var(--color-border-secondary); border-radius: 50%; font-size: 11px; }
+  .check.done { border-color: var(--color-border-success); color: var(--color-text-success); background: var(--color-background-success); }
+  .check.blocked { border-color: var(--color-border-danger); color: var(--color-text-danger); background: var(--color-background-danger); }
+  details { border-top: 1px solid var(--color-border-tertiary); padding-top: 10px; }
+  summary { cursor: pointer; font-weight: 500; }
+  .variant { display: none; }
+  .variant.active { display: block; }
+
+  /* A: status-first guided form */
+  .guided-grid { display: grid; grid-template-columns: minmax(0,1fr) 225px; gap: 14px; }
+  .guided-main { min-width: 0; }
+  .sticky-side { align-self: start; position: sticky; top: 10px; }
+  .progress { display: grid; grid-template-columns: repeat(4,1fr); gap: 3px; margin: 0 0 14px; }
+  .progress span { padding: 7px 5px; text-align: center; font-size: 11px; background: var(--color-background-secondary); border-bottom: 3px solid var(--color-border-tertiary); }
+  .progress span.current { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+
+  /* B: compact workbench */
+  .workbench { display: grid; grid-template-columns: 155px minmax(0,1fr); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; }
+  .workbench-nav { padding: 12px; background: var(--color-background-secondary); border-right: 1px solid var(--color-border-tertiary); }
+  .workbench-body { min-width: 0; padding: 14px; }
+  .workbench-split { display: grid; grid-template-columns: minmax(0,1fr) minmax(240px,.86fr); gap: 14px; }
+  .compact-form .field { margin-bottom: 10px; }
+  .compact-status { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px; }
+
+  /* C: lifecycle-oriented */
+  .lifecycle-rail { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+  .stage { padding: 11px; border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); }
+  .stage.active { border-color: var(--color-border-primary); background: var(--color-background-primary); }
+  .stage-number { font-size: 11px; color: var(--color-text-tertiary); }
+  .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .maintenance { border: 1px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 12px; }
+
+  .prototype-controls { position: sticky; bottom: 8px; z-index: 4; width: fit-content; max-width: calc(100% - 24px); margin: 18px auto 10px; padding: 7px; display: flex; gap: 6px; align-items: center; border: 1px solid var(--color-border-primary); border-radius: 999px; background: var(--color-background-primary); }
+  .prototype-controls select { width: 185px; }
+  .switch-label { min-width: 145px; text-align: center; font-size: 12px; }
+  .prototype-note { text-align: center; font-size: 11px; color: var(--color-text-tertiary); margin: 7px 0 0; }
+  .toast { display: none; margin: 0 18px 12px; padding: 8px 10px; border: 1px solid var(--color-border-success); background: var(--color-background-success); color: var(--color-text-success); border-radius: var(--border-radius-md); }
+  .toast.show { display: block; }
+
+  @media (max-width: 680px) {
+    .guided-grid, .workbench, .workbench-split, .review-grid { grid-template-columns: 1fr; }
+    .workbench-nav { border-right: 0; border-bottom: 1px solid var(--color-border-tertiary); }
+    .section-nav { grid-template-columns: repeat(4,1fr); }
+    .section-nav button { text-align: center; font-size: 11px; }
+    .sticky-side { position: static; }
+    .compact-status, .lifecycle-rail { grid-template-columns: 1fr; }
+    .extension-row { grid-template-columns: 1fr; }
+    .prototype-controls { border-radius: var(--border-radius-md); flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+
+<div class="prototype">
+  <div class="app-shell">
+    <div class="admin-bar"><span>Site setup</span><span>Administrator · Log out</span></div>
+    <div class="site-head">
+      <div><div class="site-name">Example Plone site</div><div class="crumbs">Site setup / Security policy</div></div>
+      <span class="badge">Classic UI control panel</span>
+    </div>
+    <div class="expiry-alert" id="expiryAlert">
+      <strong id="expiryAlertTitle">Security policy expires soon.</strong>
+      <span id="expiryAlertBody">Review it now to keep security.txt available.</span>
+      <button type="button" onclick="showToast('Opened Security policy control panel')">Review policy</button>
+    </div>
+
+    <main class="page">
+      <div class="page-title">
+        <div>
+          <h1>Security policy</h1>
+          <p class="muted">Manage the information published at <span class="mono">/.well-known/security.txt</span>.</p>
+          <div class="status-line">
+            <span class="badge" id="stateBadge">Draft</span>
+            <span class="tiny" id="lastSaved">Last saved 8 minutes ago</span>
+          </div>
+        </div>
+        <div class="actions" id="topActions"></div>
+      </div>
+
+      <section class="variant" data-variant="A">
+        <div class="progress"><span class="current">1. Contact</span><span>2. Disclosure</span><span>3. Extensions</span><span>4. Review</span></div>
+        <div class="guided-grid">
+          <div class="guided-main">
+            <div class="card">
+              <div class="card-head"><div><h2>Contact and expiry</h2><p class="muted">The minimum information needed to publish.</p></div><span class="badge">Required</span></div>
+              <div class="stack">
+                <div class="field"><label>Contact methods</label><div class="row"><input value="mailto:security@example.org" aria-label="Contact method"><button type="button">Remove</button></div><button type="button" onclick="showToast('Added a contact row')">Add contact method</button><span class="error-text scenario-error">Add at least one Contact before publishing.</span></div>
+                <div class="field"><label>Expires</label><input id="expiryA" type="datetime-local" value="2027-03-01T12:00"><span class="help">Exact instant; published in UTC. Approaching-expiry warnings begin 30 days before this date.</span><span class="error-text scenario-expired">Expiry must be in the future.</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div><h2>Disclosure information</h2><p class="muted">Optional links that help researchers act on the policy.</p></div><button type="button">Collapse</button></div>
+              <div class="stack"><div class="field"><label>Policy URLs</label><input value="https://example.org/security-policy"><span class="warning-text scenario-warning">Recommended information is missing.</span></div><div class="field"><label>Preferred languages</label><input value="en, de"><span class="help">All listed languages have equal priority.</span></div><div class="field"><label>Canonical URLs</label><input value="https://example.org/.well-known/security.txt"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div><h2>Extension fields</h2><p class="muted">Use registered or forward-compatible custom field names.</p></div><button type="button" onclick="showToast('Added an extension row')">Add field</button></div>
+              <div class="extension-row"><input value="CSAF" aria-label="Extension name"><input value="https://example.org/.well-known/csaf/provider-metadata.json" aria-label="Extension value"><button type="button">Remove</button></div>
+              <div class="extension-row"><input value="Bug-Bounty" aria-label="Extension name"><input value="https://example.org/security/bounty" aria-label="Extension value"><button type="button">Remove</button></div>
+              <p class="help">Rows publish after the standard fields in this order. Drag handles would support reordering in the real form.</p>
+            </div>
+          </div>
+          <aside class="sticky-side stack">
+            <div class="card"><h2>Policy status</h2><div class="metric"><span class="tiny">Expiry</span><b id="daysA">210 days</b><span class="tiny" id="expiryHintA">No action needed</span></div><div class="metric" style="margin-top:8px"><span class="tiny">Public endpoint</span><b id="endpointA">404</b><span class="tiny mono">/.well-known/security.txt</span></div></div>
+            <div class="card"><h2>Checks</h2><div id="messagesA"></div><button type="button" onclick="showToast('Validation complete — state shown in Checks')">Validate draft</button></div>
+            <div class="card"><h2>Signing</h2><div id="signingA"></div></div>
+            <div class="card"><h2>Generated preview</h2><button type="button" onclick="showToast('Opened the full generated preview')">Open preview</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="variant" data-variant="B">
+        <div class="compact-status">
+          <div class="metric"><span class="tiny">Lifecycle</span><b id="lifecycleB">Draft</b><span class="tiny">Owner intent + effective state</span></div>
+          <div class="metric"><span class="tiny">Expiry</span><b id="daysB">210 days</b><span class="tiny" id="expiryHintB">No action needed</span></div>
+          <div class="metric"><span class="tiny">Endpoint</span><b id="endpointB">404</b><span class="tiny">Current anonymous response</span></div>
+        </div>
+        <div class="workbench">
+          <nav class="workbench-nav"><h3>Policy workspace</h3><div class="section-nav"><button class="active" type="button">Core fields</button><button type="button">More links</button><button type="button">Extensions</button><button type="button">REST state</button></div><hr><h3>Checks</h3><div id="messagesB"></div><h3>Signing</h3><div id="signingB"></div></nav>
+          <div class="workbench-body">
+            <div class="workbench-split">
+              <div class="compact-form">
+                <div class="field"><label>Contact methods</label><input value="mailto:security@example.org"><input value="https://example.org/security/report"><span class="error-text scenario-error">At least one Contact is required to publish.</span><button type="button">Add another</button></div>
+                <div class="field"><label>Expires</label><input type="datetime-local" value="2027-03-01T12:00"><span class="error-text scenario-expired">This date has passed.</span></div>
+                <div class="field"><label>Canonical URL</label><input value="https://example.org/.well-known/security.txt"></div>
+                <div class="field"><label>Policy URL</label><input value="https://example.org/security-policy"></div>
+                <details><summary>Extension fields (2)</summary><div style="margin-top:10px"><div class="extension-row"><input value="CSAF"><input value="https://example.org/.well-known/csaf/provider-metadata.json"><button type="button">×</button></div><div class="extension-row"><input value="Bug-Bounty"><input value="https://example.org/security/bounty"><button type="button">×</button></div><button type="button">Add extension field</button></div></details>
+              </div>
+              <div><div class="card-head"><div><h2>Generated preview</h2><span class="tiny" id="previewModeB">Unsigned bytes</span></div><button type="button" onclick="showToast('Copied generated representation')">Copy</button></div><pre class="preview" id="previewB"></pre><details style="margin-top:12px"><summary>State for a separate frontend</summary><pre class="rest-state" id="restB"></pre></details></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="variant" data-variant="C">
+        <div class="lifecycle-rail"><div class="stage active"><span class="stage-number">Step 1</span><h3>Write the policy</h3><span class="tiny">Structured fields and extensions</span></div><div class="stage"><span class="stage-number">Step 2</span><h3>Review the output</h3><span class="tiny">Resolve blockers and warnings</span></div><div class="stage"><span class="stage-number">Step 3</span><h3>Publish and maintain</h3><span class="tiny">Endpoint, signing, expiry</span></div></div>
+        <div class="review-grid">
+          <div class="stack">
+            <div class="card"><div class="card-head"><div><h2>1. Write the policy</h2><p class="muted">Start with the required fields, then add useful disclosure information.</p></div><span class="badge" id="completionC">6 of 8 recommended</span></div><div class="field"><label>Contact</label><input value="mailto:security@example.org"><span class="error-text scenario-error">Required before publication.</span></div><div class="field" style="margin-top:10px"><label>Expires</label><input type="datetime-local" value="2027-03-01T12:00"><span class="error-text scenario-expired">Choose a future date.</span></div><details style="margin-top:12px"><summary>Optional standard fields and extensions</summary><p class="tiny" style="margin-top:8px">Encryption, acknowledgments, preferred languages, canonical, policy, hiring, and 2 extension rows.</p><button type="button">Edit optional fields</button></details></div>
+            <div class="card"><div class="card-head"><div><h2>2. Review</h2><p class="muted">Blocking errors must be fixed; warnings are advice.</p></div><button type="button" onclick="showToast('Validation complete')">Run checks</button></div><div id="messagesC"></div><details><summary>Generated representation</summary><pre class="preview" id="previewC" style="margin-top:10px"></pre></details><details style="margin-top:10px"><summary>State exposed to a separate frontend</summary><pre class="rest-state" id="restC"></pre></details></div>
+          </div>
+          <div class="stack">
+            <div class="card"><h2>3. Publish</h2><div id="publishSummaryC"></div><div class="actions" id="publishActionsC"></div></div>
+            <div class="card"><h2>Signing</h2><div id="signingC"></div><p class="help">Signing is an optional deployment capability. A website owner can only enable it when the server reports that it is available and correctly configured.</p></div>
+            <div class="maintenance"><h2>Maintenance</h2><ul class="checklist" id="maintenanceC"></ul><div class="actions"><button type="button">Update expiry</button><button type="button">Review contacts</button></div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    <div class="prototype-controls" aria-label="Prototype controls">
+      <button type="button" id="prevVariant" aria-label="Previous variant">←</button>
+      <span class="switch-label" id="variantLabel">A — Guided form</span>
+      <button type="button" id="nextVariant" aria-label="Next variant">→</button>
+      <select id="scenario" aria-label="Prototype scenario">
+        <option value="empty">Empty draft</option>
+        <option value="ready" selected>Ready to publish</option>
+        <option value="expiring">Published · expires in 18 days</option>
+        <option value="expired">Blocked · expired</option>
+        <option value="signing-failure">Blocked · signing failure</option>
+      </select>
+    </div>
+  </div>
+  <p class="prototype-note">PROTOTYPE ONLY — no data is saved. Use arrows to compare the three information architectures; use the scenario menu to inspect lifecycle states.</p>
+</div>
+
+<script>
+(() => {
+  const variants = [
+    { key: 'A', name: 'Guided form' },
+    { key: 'B', name: 'Two-pane workbench' },
+    { key: 'C', name: 'Lifecycle checklist' }
+  ];
+  const preview = 'Contact: mailto:security@example.org\r\nContact: https://example.org/security/report\r\nExpires: 2027-03-01T12:00:00Z\r\nPreferred-Languages: en, de\r\nCanonical: https://example.org/.well-known/security.txt\r\nPolicy: https://example.org/security-policy\r\nCSAF: https://example.org/.well-known/csaf/provider-metadata.json\r\nBug-Bounty: https://example.org/security/bounty\r\n';
+  const scenarios = {
+    empty: { state: 'Draft', tone: '', enabled: false, valid: false, days: 'Not set', expiryHint: 'Required to publish', endpoint: 404, alert: false, errors: ['Contact is required.', 'Expires is required.'], warnings: ['Canonical and Policy are recommended.'], signing: { capability: 'unavailable', enabled: false, state: 'not-installed' }, actions: ['Save draft'], completion: '0 of 8 recommended' },
+    ready: { state: 'Draft', tone: '', enabled: false, valid: true, days: '210 days', expiryHint: 'No action needed', endpoint: 404, alert: false, errors: [], warnings: ['Email contact has no Encryption link.'], signing: { capability: 'available', enabled: false, state: 'ready' }, actions: ['Save draft', 'Publish'], completion: '6 of 8 recommended' },
+    expiring: { state: 'Published', tone: 'ok', enabled: true, valid: true, days: '18 days', expiryHint: 'Renew soon', endpoint: 200, alert: true, alertTitle: 'Security policy expires in 18 days.', alertBody: 'Update its expiry to prevent publication from stopping.', errors: [], warnings: ['Expires is within the 30-day warning window.'], signing: { capability: 'available', enabled: true, state: 'active' }, actions: ['Save changes', 'Disable publication'], completion: '6 of 8 recommended' },
+    expired: { state: 'Publication blocked', tone: 'bad', enabled: true, valid: false, days: 'Expired 2 days ago', expiryHint: 'Public access has stopped', endpoint: 404, alert: true, alertTitle: 'Security policy expired 2 days ago.', alertBody: 'Its public endpoint is unavailable until you set a future expiry.', errors: ['Expires must be in the future.'], warnings: [], signing: { capability: 'available', enabled: true, state: 'waiting' }, actions: ['Save corrected policy', 'Disable publication'], completion: '5 of 8 recommended' },
+    'signing-failure': { state: 'Publication blocked', tone: 'bad', enabled: true, valid: false, days: '210 days', expiryHint: 'No expiry action needed', endpoint: 503, alert: false, errors: ['Signing failed. The endpoint is unavailable; unsigned content was not served.'], warnings: [], signing: { capability: 'available', enabled: true, state: 'error' }, actions: ['Retry after operator fix', 'Disable publication'], completion: '6 of 8 recommended' }
+  };
+  let variant = new URLSearchParams(location.search).get('variant') || 'A';
+  if (!variants.some(v => v.key === variant)) variant = 'A';
+  const byId = id => document.getElementById(id);
+  const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+  function showToast(message) {
+    const toast = byId('toast');
+    toast.textContent = message + ' (prototype only)';
+    toast.classList.add('show');
+    clearTimeout(window.prototypeToastTimer);
+    window.prototypeToastTimer = setTimeout(() => toast.classList.remove('show'), 2300);
+  }
+  window.showToast = showToast;
+
+  function actionButton(label, primary = false) {
+    const danger = label.includes('Disable');
+    return `<button type="button" class="${primary ? 'primary' : ''} ${danger ? 'danger' : ''}" onclick="showToast('${label.replace(/'/g, "\\'")} selected')">${label}</button>`;
+  }
+  function renderMessages(s) {
+    const errors = s.errors.map(x => `<div class="message error" style="margin-bottom:7px"><strong>Blocks publication</strong><br>${esc(x)}</div>`).join('');
+    const warnings = s.warnings.map(x => `<div class="message warning" style="margin-bottom:7px"><strong>Warning</strong><br>${esc(x)}</div>`).join('');
+    return errors + warnings || '<div class="message success">No publication blockers.</div>';
+  }
+  function renderSigning(s) {
+    if (s.signing.capability === 'unavailable') return '<span class="badge">Not installed</span><p class="tiny">Ask an operator to install and configure the signing extra.</p>';
+    if (s.signing.state === 'active') return '<span class="badge ok">Clear-signing active</span><p class="tiny">The endpoint serves the signed representation. The generated unsigned bytes remain available for review.</p><button type="button">View key identity</button>';
+    if (s.signing.state === 'error') return '<span class="badge bad">Signing error</span><p class="error-text">An operator must repair the deployment secret or signing service.</p><button type="button">Show operator details</button>';
+    if (s.signing.state === 'waiting') return '<span class="badge warn">Waiting for valid policy</span><p class="tiny">Signing resumes after the expiry blocker is corrected.</p>';
+    return '<span class="badge">Available · off</span><p class="tiny">The deployment supports signing. Enabling it will require a matching Canonical URL.</p><button type="button">Configure signing</button>';
+  }
+  function restPayload(s) {
+    return JSON.stringify({
+      state: s.state.toLowerCase().replaceAll(' ', '-'),
+      publication_enabled: s.enabled,
+      publication_valid: s.valid,
+      expires_in_days: typeof s.days === 'string' && /^\\d/.test(s.days) ? parseInt(s.days) : null,
+      errors: s.errors,
+      warnings: s.warnings,
+      signing: s.signing,
+      public_endpoint: { status: s.endpoint, path: '/.well-known/security.txt' },
+      available_actions: s.actions.map(x => x.toLowerCase().replaceAll(' ', '_'))
+    }, null, 2);
+  }
+  function renderScenario() {
+    const s = scenarios[byId('scenario').value];
+    byId('stateBadge').textContent = s.state;
+    byId('stateBadge').className = `badge ${s.tone}`;
+    byId('topActions').innerHTML = s.actions.map((x, i) => actionButton(x, i === s.actions.length - 1 && x === 'Publish')).join('');
+    byId('expiryAlert').classList.toggle('show', s.alert);
+    byId('expiryAlertTitle').textContent = s.alertTitle || '';
+    byId('expiryAlertBody').textContent = s.alertBody || '';
+    ['A','B'].forEach(k => { byId(`days${k}`).textContent = s.days; byId(`expiryHint${k}`).textContent = s.expiryHint; byId(`endpoint${k}`).textContent = s.endpoint; });
+    byId('lifecycleB').textContent = s.state;
+    ['A','B','C'].forEach(k => { byId(`messages${k}`).innerHTML = renderMessages(s); byId(`signing${k}`).innerHTML = renderSigning(s); });
+    document.querySelectorAll('.scenario-error').forEach(el => el.style.display = byId('scenario').value === 'empty' ? '' : 'none');
+    document.querySelectorAll('.scenario-expired').forEach(el => el.style.display = byId('scenario').value === 'expired' ? '' : 'none');
+    document.querySelectorAll('.scenario-warning').forEach(el => el.style.display = s.warnings.length ? '' : 'none');
+    byId('previewB').textContent = preview;
+    byId('previewC').textContent = preview;
+    byId('previewModeB').textContent = s.signing.state === 'active' ? 'Unsigned source · signed output active' : 'Exact generated unsigned bytes';
+    byId('restB').textContent = restPayload(s);
+    byId('restC').textContent = restPayload(s);
+    byId('completionC').textContent = s.completion;
+    const publishText = s.state === 'Draft' ? (s.valid ? 'The draft passes publication checks and can be enabled.' : 'Finish the required fields and resolve blockers before publication can be enabled.') : s.state === 'Published' ? 'Publication is enabled. The anonymous endpoint is healthy.' : `Publication intent is still enabled, but the endpoint currently returns ${s.endpoint}.`;
+    byId('publishSummaryC').innerHTML = `<p>${esc(publishText)}</p><div class="metric"><span class="tiny">Anonymous endpoint now</span><b>${s.endpoint}</b><span class="tiny mono">/.well-known/security.txt</span></div>`;
+    byId('publishActionsC').innerHTML = s.actions.map((x,i) => actionButton(x, i === s.actions.length - 1 && x === 'Publish')).join('');
+    byId('maintenanceC').innerHTML = `
+      <li><span class="check ${s.days.includes('Expired') ? 'blocked' : 'done'}">${s.days.includes('Expired') ? '!' : '✓'}</span><div><strong>Expiry</strong><div class="tiny">${esc(s.days)} · ${esc(s.expiryHint)}</div></div></li>
+      <li><span class="check done">✓</span><div><strong>Contact review</strong><div class="tiny">2 contact methods configured</div></div></li>
+      <li><span class="check ${s.signing.state === 'error' ? 'blocked' : 'done'}">${s.signing.state === 'error' ? '!' : '✓'}</span><div><strong>Signing</strong><div class="tiny">${esc(s.signing.state)}</div></div></li>`;
+  }
+  function renderVariant(updateUrl = true) {
+    document.querySelectorAll('.variant').forEach(el => el.classList.toggle('active', el.dataset.variant === variant));
+    const item = variants.find(v => v.key === variant);
+    byId('variantLabel').textContent = `${item.key} — ${item.name}`;
+    if (updateUrl) { const url = new URL(location.href); url.searchParams.set('variant', variant); history.replaceState({}, '', url); }
+  }
+  function cycle(delta) { const i = variants.findIndex(v => v.key === variant); variant = variants[(i + delta + variants.length) % variants.length].key; renderVariant(); }
+  byId('prevVariant').addEventListener('click', () => cycle(-1));
+  byId('nextVariant').addEventListener('click', () => cycle(1));
+  byId('scenario').addEventListener('change', renderScenario);
+  document.addEventListener('keydown', e => {
+    if (!['ArrowLeft','ArrowRight'].includes(e.key) || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.isContentEditable) return;
+    cycle(e.key === 'ArrowRight' ? 1 : -1);
+  });
+  renderVariant(false);
+  renderScenario();
+})();
+</script>

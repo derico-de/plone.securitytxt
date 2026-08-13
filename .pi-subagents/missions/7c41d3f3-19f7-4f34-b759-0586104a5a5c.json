@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "7c41d3f3-19f7-4f34-b759-0586104a5a5c",
+  "title": "Re-review the final implementation in /workspaces/plone.securitytxt after review fixes.",
+  "objective": "Re-review the final implementation in /workspaces/plone.securitytxt after review fixes.\nDiff command: git diff df6a0a4...HEAD\nCommits: 537c166 Implement security.txt policy control panel; 93f4e36 Harden policy signing and management UI\nStandards sources: AGENTS.md, .editorconfig, pyproject.toml, README.md. Run checks as useful.\nSmell baseline (judgement calls; repo rules override): Mysterious Name, Duplicated Code, Feature Envy, Data Clumps, Primitive Obsession, Repeated Switches, Shotgun Surgery, Divergent Change, Speculative Generality, Message Chains, Middle Man, Refused Bequest.\nReport only remaining concrete documented-standard violations or material smells, per file/hunk. Distinguish hard violations from judgement calls. Skip tooling-enforced issues. Under 300 words. Do not edit.",
+  "status": "completed",
+  "createdAt": "2026-08-11T16:24:42.091Z",
+  "updatedAt": "2026-08-11T16:28:14.456Z",
+  "runs": [
+    {
+      "runId": "call_o6TArAPb6a0cEcCGAjS91GVj|fc_08fcdb1d357b40a0016a7b4cc1a4988191b1ea6534ef6ffbba",
+      "mode": "workflow",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:28:14.456Z",
+      "completedAt": "2026-08-11T16:28:14.456Z",
+      "usage": {
+        "tokens": 160587
+      }
+    }
+  ],
+  "workflowChildren": [
+    {
+      "workflowRunId": "call_o6TArAPb6a0cEcCGAjS91GVj|fc_08fcdb1d357b40a0016a7b4cc1a4988191b1ea6534ef6ffbba",
+      "key": "standards-recheck",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:24:42.118Z",
+      "updatedAt": "2026-08-11T16:28:14.444Z",
+      "artifactPaths": [
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/a7ba15b7/run-0/session.jsonl"
+      ],
+      "runId": "a7ba15b7",
+      "agent": "reviewer",
+      "task": "Re-review the final implementation in /workspaces/plone.securitytxt after review fixes.\nDiff command: git diff df6a0a4...HEAD\nCommits: 537c166 Implement security.txt policy control panel; 93f4e36 Harden policy signing and management UI\nStandards sources: AGENTS.md, .editorconfig, pyproject.toml, README.md. Run checks as useful.\nSmell baseline (judgement calls; repo rules override): Mysterious Name, Duplicated Code, Feature Envy, Data Clumps, Primitive Obsession, Repeated Switches, Shotgun Surgery, Divergent Change, Speculative Generality, Message Chains, Middle Man, Refused Bequest.\nReport only remaining concrete documented-standard violations or material smells, per file/hunk. Distinguish hard violations from judgement calls. Skip tooling-enforced issues. Under 300 words. Do not edit.",
+      "completedAt": "2026-08-11T16:28:14.444Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/a7ba15b7/run-0/session.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T16:28:14.444Z",
+        "status": "completed"
+      }
+    },
+    {
+      "workflowRunId": "call_o6TArAPb6a0cEcCGAjS91GVj|fc_08fcdb1d357b40a0016a7b4cc1a4988191b1ea6534ef6ffbba",
+      "key": "spec-recheck",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:24:42.134Z",
+      "updatedAt": "2026-08-11T16:26:46.805Z",
+      "artifactPaths": [
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/30886047/run-0/session.jsonl"
+      ],
+      "runId": "30886047",
+      "agent": "reviewer",
+      "task": "Re-review the final implementation in /workspaces/plone.securitytxt after fixes.\nDiff command: git diff df6a0a4...HEAD\nCommits: 537c166 Implement security.txt policy control panel; 93f4e36 Harden policy signing and management UI\nSpec source: .scratch/securitytxt-control-panel/map.md and all .scratch/securitytxt-control-panel/issues/*.md.\nVerify especially: emergency signing profile invalidation, malformed REST JSON atomicity, signing key/digest prerequisites, and Classic UI lifecycle/preview/confirmation. Report only remaining missing/incorrect requirements or material scope creep, quoting spec lines. Prioritize release blockers. Under 350 words. Do not edit.",
+      "completedAt": "2026-08-11T16:26:46.805Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/30886047/run-0/session.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T16:26:46.805Z",
+        "status": "completed"
+      }
+    }
+  ],
+  "decisions": [],
+  "artifacts": [
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/a7ba15b7_reviewer_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/a7ba15b7_reviewer_0_transcript.jsonl",
+      "description": "Child transcript"
+    },
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/30886047_reviewer_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/30886047_reviewer_0_transcript.jsonl",
+      "description": "Child transcript"
+    }
+  ],
+  "receipts": [],
+  "cwd": "/workspaces/plone.securitytxt",
+  "ownerSessionId": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96.jsonl",
+  "summary": "Workflow completed.\n\nReturn:\n{\n  \"standards\": \"## Review\\n- Correct: 28 tests pass; `git diff --check` and Ruff lint pass.\\n- **Hard, medium:** `services/security_policy.py:108-116` decodes bytes outside error handling. Invalid UTF-8 raises `UnicodeDecodeError`, producing 500 instead of documented 400 invalid JSON.\\n- **Hard, medium:** `policy.py:51-53,237-256` does not validate BCP 47 correctly: valid `i-klingon` is rejected while invalid dangling extension `en-u` is accepted.\\n- **Hard, medium:** `policy.py:214-235,451-470` accepts Canonical URL port `99999`, then normalization rejects it. Verified outcome: management reports `published`/200 while the endpoint returns 404.\\n- Note: No material judgement-call smells found. Requested `plan.md` and `progress.md` were absent.\",\n  \"spec\": \"## Review\\n- **Blocker:** `policy.py:337-345,591-619` saves Signed mode with a nonexistent profile; reproduced as revision 2. Spec `06:67`: “Saving that choice requires the profile to exist”; `06:63`: Signed mode “cannot be newly selected” without signing support.\\n- **Blocker:** Signing prerequisites are untested: `tests/test_signing.py:12-52` only validates profile parsing—none of `signing_helper.py`. Spec `09:107` requires exact-subkey, RSA/key-size/SHA-256, expiry/revocation, malformed output, timeout, and real-GnuPG coverage.\\n- **Major:** Classic UI remains lifecycle-incomplete. `controlpanels/security_policy.py:123-133,180-217` always exposes both Publish/Disable, always says “Save draft,” has a generic publish confirmation, and test-signing ignores unsaved form values. No inline domain diagnostics or public key identity is rendered. This conflicts with `04:28-31,36-41`, including “either Publish or Disable,” lifecycle gating, confirmation summarizing endpoint/expiry/signing mode, and inline feedback.\\n- **Major:** `services/security_policy.py:108-116` decodes UTF-8 outside error handling; malformed bytes raise `UnicodeDecodeError` rather than structured `400`. Persistence ..."
+}

@@ -15,6 +15,7 @@ class TestControlPanelSecurityPolicy:
     @pytest.fixture(autouse=True)
     def _setup(self, integration):
         self.portal = integration["portal"]
+        self.request = integration["request"]
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
 
     def test_controlpanel_registered(self):
@@ -26,24 +27,46 @@ class TestControlPanelSecurityPolicy:
     def test_controlpanel_view(self):
         """Test control panel view is accessible."""
         from zope.component import getMultiAdapter
-        from zope.interface import alsoProvides
-        from zope.publisher.browser import TestRequest
 
-        from plone.app.z3cform.interfaces import IPloneFormLayer
-
-        request = TestRequest()
-        alsoProvides(request, IPloneFormLayer)
         view = getMultiAdapter(
-            (self.portal, request),
+            (self.portal, self.request),
             name="security-policy-controlpanel",
         )
         assert view is not None
         view.update()
+        rendered = view.render()
         assert "Contact" in view.contents
+        assert "mailto:security@example.com" in view.contents
+        assert "The official URL where this security.txt is published" in view.contents
+        assert "Canonical requires a public HTTPS URL" in view.contents
+        assert "http://nohost/plone/.well-known/security.txt" in view.contents
+        assert "December 31, 2027 at 23:59 UTC" in view.contents
+        assert "de-CH (German as used in Switzerland)" in view.contents
+        assert "Example: en, de-CH" in view.contents
+        assert "Publication summary" in rendered
+        assert "Generated unsigned preview" in rendered
         assert view.form_instance.preview == ""
+        assert 'name="form.widgets.expires"' in view.contents
+        assert 'type="datetime-local"' in view.contents
         assert view.form_instance.actions["save"].title == "Save draft"
         assert "disable" not in view.form_instance.actions
-        assert "window.confirm" in view.form_instance.actions["publish"].onclick
+        publish_confirmation = view.form_instance.actions["publish"].onclick
+        assert "window.confirm" in publish_confirmation
+        assert "http://nohost/plone/.well-known/security.txt" in publish_confirmation
+
+    def test_preferred_languages_use_comma_separated_form_value(self):
+        """The RFC field syntax is converted to the internal ordered list."""
+        from zope.component import getMultiAdapter
+
+        view = getMultiAdapter(
+            (self.portal, self.request),
+            name="security-policy-controlpanel",
+        )
+        view.update()
+
+        candidate = view.form_instance._candidate({"preferred_languages": "en, de-CH, fr"})
+
+        assert candidate["preferred_languages"] == ["en", "de-CH", "fr"]
 
     def test_policy_is_not_exposed_as_registry_settings(self):
         """Generic registry/control-panel mutation cannot bypass policy rules."""

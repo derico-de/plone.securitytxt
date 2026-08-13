@@ -1,0 +1,3 @@
+Research completed. Key findings: supported Plone lines are 6.0–6.2, with only 6.2 under routine maintenance; recommended CI boundaries are Plone 6.0.15/Python 3.10 and Plone 6.2.1/Python 3.14. Current CI does not prove Plone minor-line compatibility. GnuPG 2.2.27 requires vendor-supported packaging; upstream current is 2.5.21.
+
+File: `/workspaces/plone.securitytxt/.pi-subagents/artifacts/outputs/9b5edec9/research.md`

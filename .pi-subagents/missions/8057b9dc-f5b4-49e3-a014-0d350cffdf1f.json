@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "8057b9dc-f5b4-49e3-a014-0d350cffdf1f",
+  "title": "Review the implementation in /workspaces/plone.securitytxt.",
+  "objective": "Review the implementation in /workspaces/plone.securitytxt.\nDiff command: git diff df6a0a4...HEAD\nCommits: 537c166 Implement security.txt policy control panel\nStandards sources: AGENTS.md, .editorconfig, pyproject.toml, README.md. Run the diff and read these sources.\nSmell baseline (judgement calls; repo rules override): Mysterious Name—names do not reveal intent; Duplicated Code—same logic shape repeats; Feature Envy—method reaches into another object more than its own; Data Clumps—same fields repeatedly travel together; Primitive Obsession—primitive stands in for a domain concept; Repeated Switches—same conditional dispatch recurs; Shotgun Surgery—one logical change forces scattered edits; Divergent Change—one module changes for unrelated reasons; Speculative Generality—abstractions/hooks not required; Message Chains—long navigation leaks structure; Middle Man—mostly delegates; Refused Bequest—subclass ignores inheritance.\nReport per file/hunk: (a) every documented-standard violation, citing source/rule; (b) baseline smells, naming and quoting the hunk. Distinguish hard violations from judgement calls. Skip tooling-enforced issues. Under 400 words. Do not edit.",
+  "status": "completed",
+  "createdAt": "2026-08-11T16:10:51.398Z",
+  "updatedAt": "2026-08-11T16:14:20.807Z",
+  "runs": [
+    {
+      "runId": "call_fuA08NFUi9gFWaJ0mjTSPpQH|fc_08fcdb1d357b40a0016a7b4981fb20819196f4aa21fad9c708",
+      "mode": "workflow",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:14:20.806Z",
+      "completedAt": "2026-08-11T16:14:20.806Z",
+      "usage": {
+        "tokens": 155211
+      }
+    }
+  ],
+  "workflowChildren": [
+    {
+      "workflowRunId": "call_fuA08NFUi9gFWaJ0mjTSPpQH|fc_08fcdb1d357b40a0016a7b4981fb20819196f4aa21fad9c708",
+      "key": "standards",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:10:51.430Z",
+      "updatedAt": "2026-08-11T16:14:20.800Z",
+      "artifactPaths": [
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/4a07104b/run-0/session.jsonl"
+      ],
+      "runId": "4a07104b",
+      "agent": "reviewer",
+      "task": "Review the implementation in /workspaces/plone.securitytxt.\nDiff command: git diff df6a0a4...HEAD\nCommits: 537c166 Implement security.txt policy control panel\nStandards sources: AGENTS.md, .editorconfig, pyproject.toml, README.md. Run the diff and read these sources.\nSmell baseline (judgement calls; repo rules override): Mysterious Name—names do not reveal intent; Duplicated Code—same logic shape repeats; Feature Envy—method reaches into another object more than its own; Data Clumps—same fields repeatedly travel together; Primitive Obsession—primitive stands in for a domain concept; Repeated Switches—same conditional dispatch recurs; Shotgun Surgery—one logical change forces scattered edits; Divergent Change—one module changes for unrelated reasons; Speculative Generality—abstractions/hooks not required; Message Chains—long navigation leaks structure; Middle Man—mostly delegates; Refused Bequest—subclass ignores inheritance.\nReport per file/hunk: (a) every documented-standard violation, citing source/rule; (b) baseline smells, naming and quoting the hunk. Distinguish hard violations from judgement calls. Skip tooling-enforced issues. Under 400 words. Do not edit.",
+      "completedAt": "2026-08-11T16:14:20.800Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/4a07104b/run-0/session.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T16:14:20.800Z",
+        "status": "completed"
+      }
+    },
+    {
+      "workflowRunId": "call_fuA08NFUi9gFWaJ0mjTSPpQH|fc_08fcdb1d357b40a0016a7b4981fb20819196f4aa21fad9c708",
+      "key": "spec",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:10:51.446Z",
+      "updatedAt": "2026-08-11T16:12:55.614Z",
+      "artifactPaths": [
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/f409f5cb/run-0/session.jsonl"
+      ],
+      "runId": "f409f5cb",
+      "agent": "reviewer",
+      "task": "Review the implementation in /workspaces/plone.securitytxt against the full originating specification.\nDiff command: git diff df6a0a4...HEAD\nCommits: 537c166 Implement security.txt policy control panel\nSpec source: .scratch/securitytxt-control-panel/map.md and all .scratch/securitytxt-control-panel/issues/*.md. Read the relevant files and the diff.\nReport: (a) missing/partial requirements; (b) scope creep; (c) requirements that look implemented incorrectly. Quote the spec line for each finding. Prioritize concrete release-blocking behavior, security, and data-integrity issues. Under 400 words. Do not edit.",
+      "completedAt": "2026-08-11T16:12:55.614Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/f409f5cb/run-0/session.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T16:12:55.614Z",
+        "status": "completed"
+      }
+    }
+  ],
+  "decisions": [],
+  "artifacts": [
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/4a07104b_reviewer_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/4a07104b_reviewer_0_transcript.jsonl",
+      "description": "Child transcript"
+    },
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/f409f5cb_reviewer_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/f409f5cb_reviewer_0_transcript.jsonl",
+      "description": "Child transcript"
+    }
+  ],
+  "receipts": [],
+  "cwd": "/workspaces/plone.securitytxt",
+  "ownerSessionId": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96.jsonl",
+  "summary": "Workflow completed.\n\nReturn:\n{\n  \"standards\": \"## Review\\n- Correct: Diff is clean; all 26 tests and Ruff pass. No non-tooling AGENTS/.editorconfig/pyproject standard violations found.\\n- **Blocker — High, documented-standard violation:** `src/plone/securitytxt/policy.py:649-664` validates signed artifacts only against stored hashes/profile ID. It never checks the current profile’s `enabled` or `revision`, despite `docs/signing.md:13` and `README.md:11` promising fail-closed behavior after disabling/revising a profile.\\n- **Note — Medium, documented-standard violation:** `src/plone/securitytxt/controlpanels/security_policy.py:176-183` assigns `self.preview`, but no template renders it; repository search finds no reader. Thus the Classic UI Preview action described by `docs/security-policy.md:7` displays only counts, not the preview.\\n- **Note — Medium:** `signing.py:117-128` accepts 32 KiB unsigned input, but base64/JSON expansion exceeds `signing_helper.py:11-18`’s 40 KiB stdin limit from about 30 KiB onward. Valid signed policies can therefore fail unexpectedly.\\n- **Note — Medium:** `policy.py:565-569` does not translate signer test failures into `PolicyCommandError`; `services/security_policy.py:80-87` consequently lets missing/disabled-profile operational errors become HTTP 500 instead of the documented management error response.\\n- **Note — Judgement call, Repeated Switches:** publication mode dispatch recurs as `\\\"if mode == 'signed'\\\"` (`policy.py:376`), `\\\"if mode == 'unsigned'\\\"` (`:623`), and `\\\"publication_mode == 'signed'\\\"` (`:663`), increasing the chance of inconsistent mode behavior.\",\n  \"spec\": \"## Review\\n- **Blocker:** Emergency signing withdrawal is ineffective. Spec: “`enabled: false` or changes its revision…invalidates the binding and produces `503`” (`issues/06…md:110`). Serving validates only profile ID/content hashes; it never compares configured revision/enabled state (`policy.py:649-679`). A withdrawn signature remains public.\\n- **Bloc..."
+}

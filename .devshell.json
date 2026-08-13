@@ -1,0 +1,6 @@
+{
+  "name": "plone.securitytxt",
+  "dirs": [
+    "."
+  ]
+}

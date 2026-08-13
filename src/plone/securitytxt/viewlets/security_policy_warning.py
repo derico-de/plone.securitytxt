@@ -4,6 +4,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component.hooks import getSite
 
 from plone.app.layout.viewlets.common import ViewletBase
+from plone.securitytxt.i18n import _
 from plone.securitytxt.policy import SecurityPolicyApplication
 
 
@@ -19,8 +20,11 @@ class SecurityPolicyWarning(ViewletBase):
         self.available = self.state["show_expiry_warning"]
         seconds = self.state["expiry_seconds"]
         if seconds is None or seconds <= 0:
-            self.message = "The published Security Policy has expired."
+            self.message = _("The published Security Policy has expired.")
         else:
             days = max(0, seconds // (24 * 60 * 60))
-            self.message = f"The Security Policy expires in {days} days."
+            self.message = _(
+                "The Security Policy expires in ${days} days.",
+                mapping={"days": days},
+            )
         self.review_url = f"{site.absolute_url()}/@@security-policy-controlpanel"

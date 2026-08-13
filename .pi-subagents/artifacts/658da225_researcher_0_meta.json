@@ -1,0 +1,140 @@
+{
+  "runId": "658da225",
+  "agent": "researcher",
+  "task": "Research and resolve the evidence-gathering portion of .scratch/securitytxt-control-panel/issues/05-evaluate-openpgp-approaches.md in /workspaces/plone.securitytxt. Write exactly one durable research asset at .scratch/securitytxt-control-panel/research/openpgp-signing-approaches.md. Do not edit the ticket, map, CONTEXT.md, source code, or any other project file.\n\nGoal: determine which maintained OpenPGP approach is suitable for optional RFC 9116-compliant clear-signing in this Plone add-on. Compare viable Python libraries and direct/external gpg integration for Plone 6.0+ and the repository's Python support (inspect pyproject.toml). Cover maintenance/release recency, license compatibility, supported Python/platforms, packaging and native/subprocess weight, subprocess and sandbox/container implications, secret key selection, passphrase/agent handling, clear-sign mechanics and deterministic-output limits, RFC 4880/9580 and real gpg interoperability, structured error reporting, concurrency, and unit/integration testability. Recommend the dependency arrangement for the signing extra and a deployment-secret contract that stores neither keys nor passphrases in Plone.\n\nUse high-trust primary sources only: RFCs, official project documentation, release metadata, source repositories/code, and upstream issue trackers where needed. Date the research 2026-08-08. Distinguish verified facts from product recommendations, cite important claims inline, and end with a linked Sources section. Inspect .scratch/securitytxt-control-panel/research/securitytxt-standards-baseline.md and issue 03's Answer for settled local constraints. Stop after enough evidence to make a recommendation; explicitly note evidence gaps and residual risks. Return a concise summary and the artifact path.",
+  "exitCode": 1,
+  "processSignal": "SIGTERM",
+  "usage": {
+    "input": 44818,
+    "output": 9482,
+    "cacheRead": 190976,
+    "cacheWrite": 0,
+    "cost": 0.604038,
+    "turns": 12
+  },
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "attemptedModels": [
+    "openai-codex/gpt-5.6-sol:medium"
+  ],
+  "modelAttempts": [
+    {
+      "model": "openai-codex/gpt-5.6-sol:medium",
+      "success": false,
+      "exitCode": 1,
+      "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+      "usage": {
+        "input": 44818,
+        "output": 9482,
+        "cacheRead": 190976,
+        "cacheWrite": 0,
+        "cost": 0.604038,
+        "turns": 12
+      }
+    }
+  ],
+  "durationMs": 338089,
+  "toolCount": 43,
+  "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+  "launchContractDigest": "f09c620e5b72ae383a0366d1b68277be5f72ab835c9268042414079f294810f3",
+  "launchResolvedExtensions": {
+    "version": 1,
+    "source": "launch-resolved",
+    "disableAmbientExtensions": false,
+    "runtime": [
+      "sha256:49e048d05a5c5d6f"
+    ],
+    "configured": [],
+    "effective": [
+      "sha256:49e048d05a5c5d6f"
+    ],
+    "omitted": {
+      "runtime": 0,
+      "configured": 0,
+      "effective": 0
+    }
+  },
+  "acceptance": {
+    "status": "attested",
+    "evidenceStatus": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Research asset contains concrete comparison findings, deployment recommendations, test strategy, evidence gaps, and severity-oriented residual risks."
+        }
+      ],
+      "changedFiles": [
+        ".scratch/securitytxt-control-panel/research/openpgp-signing-approaches.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "Automated tests",
+          "result": "not-run",
+          "summary": "Research-only Markdown change; artifact was read back for validation."
+        }
+      ],
+      "validationOutput": [
+        "Confirmed the artifact exists, is dated 2026-08-08, cites primary sources inline, and contains the requested comparison, recommendation, secret contract, evidence gaps, and residual risks.",
+        "No other project file was written."
+      ],
+      "residualRisks": [
+        "high: A compromised Plone worker with agent access can request arbitrary signatures; stronger isolation requires a constrained external signer or hardware policy.",
+        "medium: Windows signing behavior remains unverified.",
+        "medium: GnuPG RFC 9580 behavior and future stable-version compatibility require integration fixtures.",
+        "medium: Multi-instance signing serialization and atomic artifact persistence remain implementation decisions."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Added one durable OpenPGP signing-approaches research asset; no ticket, map, context, source, or configuration files changed.",
+      "reviewFindings": [
+        "no blockers",
+        "recommendation: use python-gnupg>=0.5.6,<0.6 in the signing extra with externally provisioned GnuPG 2.4.x, GNUPGHOME, full fingerprint selection, and gpg-agent-managed secrets"
+      ],
+      "manualNotes": "The artifact explicitly distinguishes verified facts from product recommendations and stops after sufficient evidence to choose an approach."
+    }
+  },
+  "transcriptPath": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/658da225_researcher_0_transcript.jsonl",
+  "timestamp": 1786269146076
+}

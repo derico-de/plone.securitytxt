@@ -1,0 +1,5 @@
+## Review
+- **High — `policy.py:720-744`, `signing_helper.py:107-115`:** Signed bindings omit/check no key-validity metadata. Spec requires “key-validity metadata” and says key changes invalidate artifacts (`issues/06…md:93-108`). Revocation/key-policy changes can therefore leave a `200` response.
+- **Medium — `policy.py:51-64`:** BCP 47 regex accepts repeated variants/singletons such as `en-1901-1901` and `en-u-ca-gregory-u-nu-latn`. Spec: “Preferred language tags must be valid BCP 47 tags” (`issues/02…md:34`).
+- **Medium — `policy.py:135-156`:** URI validation accepts invalid `https://:443/path` and rejects valid absolute `foo://example.com`, contrary to “any syntactically valid absolute RFC 3986 URI” (`issues/02…md:30`).
+- **Medium — `controlpanels/security_policy.py:137-142,181-184`:** Publish confirmation summarizes saved, not unsaved, mode/expiry; rejected commands discard structured diagnostics. This violates the confirmation and validation-feedback contract (`issues/04…md:28-32`).

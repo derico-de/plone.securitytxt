@@ -1,0 +1,144 @@
+{
+  "runId": "da2585c5",
+  "agent": "reviewer",
+  "task": "[Read from: /workspaces/plone.securitytxt/plan.md, /workspaces/plone.securitytxt/progress.md]\n\nRepository /workspaces/plone.securitytxt. Review git diff df6a0a4...HEAD. Latest fixes are in b565b1c. Do not edit. Spec: .scratch/securitytxt-control-panel/map.md and issues/*.md. Recheck prior blockers (profile selection/invalidation, REST malformed data, BCP47/Canonical, Classic UI actions/preview). Report only remaining implementation defects, not the explicitly broad future release matrix. Quote spec. Under 300 words.",
+  "exitCode": 0,
+  "processSignal": "SIGTERM",
+  "usage": {
+    "input": 62283,
+    "output": 7345,
+    "cacheRead": 676352,
+    "cacheWrite": 0,
+    "cost": 0.8699410000000001,
+    "turns": 20
+  },
+  "model": "openai-codex/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "openai-codex/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "openai-codex/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 62283,
+        "output": 7345,
+        "cacheRead": 676352,
+        "cacheWrite": 0,
+        "cost": 0.8699410000000001,
+        "turns": 20
+      }
+    }
+  ],
+  "durationMs": 221953,
+  "toolCount": 40,
+  "launchContractDigest": "65d91dfc3ff768a29c7f628185121d7f1e1e84e9f1eb41557c5821d1ae89f722",
+  "launchResolvedExtensions": {
+    "version": 1,
+    "source": "launch-resolved",
+    "disableAmbientExtensions": false,
+    "runtime": [
+      "sha256:49e048d05a5c5d6f"
+    ],
+    "configured": [],
+    "effective": [
+      "sha256:49e048d05a5c5d6f"
+    ],
+    "omitted": {
+      "runtime": 0,
+      "configured": 0,
+      "effective": 0
+    }
+  },
+  "acceptance": {
+    "status": "attested",
+    "evidenceStatus": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Four findings cite severity, code, and specification."
+        }
+      ],
+      "changedFiles": [],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "uv run pytest -q",
+          "result": "passed",
+          "summary": "31 passed"
+        },
+        {
+          "command": "git diff --check df6a0a4...HEAD",
+          "result": "passed",
+          "summary": "No whitespace errors"
+        }
+      ],
+      "validationOutput": [
+        "Targeted URI and BCP47 probes reproduced validation defects."
+      ],
+      "residualRisks": [
+        "Real GnuPG lifecycle and browser interaction remain untested."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Reviewed df6a0a4...b565b1c without edits.",
+      "reviewFindings": [
+        "high: signed artifact key-validity invalidation missing",
+        "medium: BCP47, RFC3986, and Classic UI defects remain"
+      ],
+      "manualNotes": "plan.md and progress.md were absent."
+    }
+  },
+  "effects": {
+    "fileMutation": {
+      "status": "not-applicable",
+      "expected": false,
+      "attempted": true
+    }
+  },
+  "transcriptPath": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/da2585c5_reviewer_0_transcript.jsonl",
+  "timestamp": 1786466213350
+}

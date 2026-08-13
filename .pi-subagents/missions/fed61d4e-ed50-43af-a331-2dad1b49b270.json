@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "fed61d4e-ed50-43af-a331-2dad1b49b270",
+  "title": "Repository /workspaces/plone.securitytxt. Review git diff df6a0a4...HEAD. Latest fixes are in b56...",
+  "objective": "Repository /workspaces/plone.securitytxt. Review git diff df6a0a4...HEAD. Latest fixes are in b565b1c. Do not edit. Standards sources: AGENTS.md, .editorconfig, pyproject.toml, README.md. Report only remaining correctness/security/standards findings or material Fowler smells; omit release-test breadth. Under 250 words.",
+  "status": "completed",
+  "createdAt": "2026-08-11T16:33:11.342Z",
+  "updatedAt": "2026-08-11T16:36:53.355Z",
+  "runs": [
+    {
+      "runId": "call_8l2EEi5ZTvU1tbhvuGaHmYA0|fc_08fcdb1d357b40a0016a7b4ec25f8081919f94f2a92def1696",
+      "mode": "workflow",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:36:53.354Z",
+      "completedAt": "2026-08-11T16:36:53.354Z",
+      "usage": {
+        "tokens": 118235
+      }
+    }
+  ],
+  "workflowChildren": [
+    {
+      "workflowRunId": "call_8l2EEi5ZTvU1tbhvuGaHmYA0|fc_08fcdb1d357b40a0016a7b4ec25f8081919f94f2a92def1696",
+      "key": "standards-final",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:33:11.374Z",
+      "updatedAt": "2026-08-11T16:36:00.707Z",
+      "artifactPaths": [
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/50004a9d/run-0/session.jsonl"
+      ],
+      "runId": "50004a9d",
+      "agent": "reviewer",
+      "task": "Repository /workspaces/plone.securitytxt. Review git diff df6a0a4...HEAD. Latest fixes are in b565b1c. Do not edit. Standards sources: AGENTS.md, .editorconfig, pyproject.toml, README.md. Report only remaining correctness/security/standards findings or material Fowler smells; omit release-test breadth. Under 250 words.",
+      "completedAt": "2026-08-11T16:36:00.707Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/50004a9d/run-0/session.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T16:36:00.707Z",
+        "status": "completed"
+      }
+    },
+    {
+      "workflowRunId": "call_8l2EEi5ZTvU1tbhvuGaHmYA0|fc_08fcdb1d357b40a0016a7b4ec25f8081919f94f2a92def1696",
+      "key": "spec-final",
+      "status": "completed",
+      "startedAt": "2026-08-11T16:33:11.392Z",
+      "updatedAt": "2026-08-11T16:36:53.351Z",
+      "artifactPaths": [
+        "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/da2585c5/run-0/session.jsonl"
+      ],
+      "runId": "da2585c5",
+      "agent": "reviewer",
+      "task": "Repository /workspaces/plone.securitytxt. Review git diff df6a0a4...HEAD. Latest fixes are in b565b1c. Do not edit. Spec: .scratch/securitytxt-control-panel/map.md and issues/*.md. Recheck prior blockers (profile selection/invalidation, REST malformed data, BCP47/Canonical, Classic UI actions/preview). Report only remaining implementation defects, not the explicitly broad future release matrix. Quote spec. Under 300 words.",
+      "completedAt": "2026-08-11T16:36:53.351Z",
+      "sessionPath": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96/da2585c5/run-0/session.jsonl",
+      "heartbeat": {
+        "updatedAt": "2026-08-11T16:36:53.351Z",
+        "status": "completed"
+      }
+    }
+  ],
+  "decisions": [],
+  "artifacts": [
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/50004a9d_reviewer_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/50004a9d_reviewer_0_transcript.jsonl",
+      "description": "Child transcript"
+    },
+    {
+      "kind": "output",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/da2585c5_reviewer_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "/workspaces/plone.securitytxt/.pi-subagents/artifacts/da2585c5_reviewer_0_transcript.jsonl",
+      "description": "Child transcript"
+    }
+  ],
+  "receipts": [],
+  "cwd": "/workspaces/plone.securitytxt",
+  "ownerSessionId": "/home/dev/.pi/agent/sessions/--workspaces-plone.securitytxt--/2026-08-11T15-46-11-867Z_019ff180-b51a-7e88-9cf7-bac01cadfc96.jsonl",
+  "summary": "Workflow completed.\n\nReturn:\n{\n  \"standards\": \"## Review\\n- **High — `src/plone/securitytxt/policy.py:343-352`:** Falsy, wrongly typed `publication_mode` values are silently converted to `\\\"unsigned\\\"`. A published signed policy submitted with `false` can therefore be republished unsigned instead of rejected, unintentionally removing signature protection.\\n- **Medium — `src/plone/securitytxt/policy.py:55-56`:** The BCP 47 regex accepts duplicate variants and singleton extensions. Verified `en-1901-1901` and `en-a-foo-a-bar` produce no validation error despite RFC 5646 prohibiting duplicates.\\n- **Low — `src/plone/securitytxt/publisher.py:84-86`:** `If-None-Match` uses exact string comparison and does not perform the required weak comparison; `W/\\\"etag\\\"` incorrectly returns `200` rather than `304`.\",\n  \"spec\": \"## Review\\n- **High — `policy.py:720-744`, `signing_helper.py:107-115`:** Signed bindings omit/check no key-validity metadata. Spec requires “key-validity metadata” and says key changes invalidate artifacts (`issues/06…md:93-108`). Revocation/key-policy changes can therefore leave a `200` response.\\n- **Medium — `policy.py:51-64`:** BCP 47 regex accepts repeated variants/singletons such as `en-1901-1901` and `en-u-ca-gregory-u-nu-latn`. Spec: “Preferred language tags must be valid BCP 47 tags” (`issues/02…md:34`).\\n- **Medium — `policy.py:135-156`:** URI validation accepts invalid `https://:443/path` and rejects valid absolute `foo://example.com`, contrary to “any syntactically valid absolute RFC 3986 URI” (`issues/02…md:30`).\\n- **Medium — `controlpanels/security_policy.py:137-142,181-184`:** Publish confirmation summarizes saved, not unsaved, mode/expiry; rejected commands discard structured diagnostics. This violates the confirmation and validation-feedback contract (`issues/04…md:28-32`).\"\n}\n\nCall trace:\n- run standards-final: started\n- run spec-final: started\n- run standards-final: completed (50004a9d) in 169335ms\n- run spec-final: completed (da2585c5..."
+}

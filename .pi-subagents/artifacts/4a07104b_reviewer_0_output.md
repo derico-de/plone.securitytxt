@@ -1,0 +1,7 @@
+## Review
+- Correct: Diff is clean; all 26 tests and Ruff pass. No non-tooling AGENTS/.editorconfig/pyproject standard violations found.
+- **Blocker — High, documented-standard violation:** `src/plone/securitytxt/policy.py:649-664` validates signed artifacts only against stored hashes/profile ID. It never checks the current profile’s `enabled` or `revision`, despite `docs/signing.md:13` and `README.md:11` promising fail-closed behavior after disabling/revising a profile.
+- **Note — Medium, documented-standard violation:** `src/plone/securitytxt/controlpanels/security_policy.py:176-183` assigns `self.preview`, but no template renders it; repository search finds no reader. Thus the Classic UI Preview action described by `docs/security-policy.md:7` displays only counts, not the preview.
+- **Note — Medium:** `signing.py:117-128` accepts 32 KiB unsigned input, but base64/JSON expansion exceeds `signing_helper.py:11-18`’s 40 KiB stdin limit from about 30 KiB onward. Valid signed policies can therefore fail unexpectedly.
+- **Note — Medium:** `policy.py:565-569` does not translate signer test failures into `PolicyCommandError`; `services/security_policy.py:80-87` consequently lets missing/disabled-profile operational errors become HTTP 500 instead of the documented management error response.
+- **Note — Judgement call, Repeated Switches:** publication mode dispatch recurs as `"if mode == 'signed'"` (`policy.py:376`), `"if mode == 'unsigned'"` (`:623`), and `"publication_mode == 'signed'"` (`:663`), increasing the chance of inconsistent mode behavior.
