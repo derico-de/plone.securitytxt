@@ -21,6 +21,7 @@ from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
 from plone.autoform import directives
 from plone.securitytxt.i18n import _
+from plone.securitytxt.policy import localize_diagnostics
 from plone.securitytxt.policy import PolicyCommandError
 from plone.securitytxt.policy import PolicyRevisionError
 from plone.securitytxt.policy import SecurityPolicyApplication
@@ -169,7 +170,10 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
         self.publication_url = f"{self.context.absolute_url().rstrip('/')}/.well-known/security.txt"
         self.application = SecurityPolicyApplication(self.context)
         self.management_state = self.application.inspect()
-        self.diagnostics = self.application.evaluate(self.management_state["values"], preview=True)
+        self.diagnostics = localize_diagnostics(
+            self.application.evaluate(self.management_state["values"], preview=True),
+            self.request,
+        )
         self.preview = self.diagnostics["preview"]
         self.lifecycle_label = LIFECYCLE_LABELS[self.management_state["lifecycle"]]
         capability = self.management_state["signing"]["capability"]
@@ -280,9 +284,9 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
             )
         except (PolicyCommandError, PolicyRevisionError) as exc:
             if isinstance(exc, PolicyCommandError) and exc.diagnostics:
-                self.diagnostics = exc.diagnostics
-            self.status = str(exc)
-            IStatusMessage(self.request).addStatusMessage(str(exc), "error")
+                self.diagnostics = localize_diagnostics(exc.diagnostics, self.request)
+            self.status = exc.message
+            IStatusMessage(self.request).addStatusMessage(exc.message, "error")
             return
         self.management_state = state
         IStatusMessage(self.request).addStatusMessage(_("Security Policy updated."), "info")
@@ -298,7 +302,9 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
     def handleValidate(self, action):
         candidate = self._extract_candidate()
         if candidate is not None:
-            result = self.application.evaluate(candidate, preview=False)
+            result = localize_diagnostics(
+                self.application.evaluate(candidate, preview=False), self.request
+            )
             self.diagnostics = result
             self.status = self._diagnostic_summary(result)
 
@@ -306,7 +312,9 @@ class SecurityPolicyControlPanelForm(RegistryEditForm):
     def handlePreview(self, action):
         candidate = self._extract_candidate()
         if candidate is not None:
-            result = self.application.evaluate(candidate, preview=True)
+            result = localize_diagnostics(
+                self.application.evaluate(candidate, preview=True), self.request
+            )
             self.diagnostics = result
             self.preview = result["preview"]
             self.status = self._diagnostic_summary(result)

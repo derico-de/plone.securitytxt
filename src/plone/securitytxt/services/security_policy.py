@@ -8,6 +8,8 @@ from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 
 from plone.restapi.services import Service
+from plone.securitytxt.policy import localize_diagnostics
+from plone.securitytxt.policy import localize_message
 from plone.securitytxt.policy import PolicyCommandError
 from plone.securitytxt.policy import PolicyPermissionError
 from plone.securitytxt.policy import PolicyRevisionError
@@ -39,7 +41,7 @@ class SecurityPolicyService(Service):
         except PolicyPermissionError:
             return self._error(403, "forbidden", "Permission denied.")
         self.request.response.setHeader("ETag", f'"{state["revision"]}"')
-        return state
+        return localize_diagnostics(state, self.request)
 
     def PATCH(self):
         if self.params:
@@ -64,7 +66,7 @@ class SecurityPolicyService(Service):
             except PolicyPermissionError:
                 return self._error(403, "forbidden", "Permission denied.")
             self.request.response.setHeader("Cache-Control", "no-store")
-            return result
+            return localize_diagnostics(result, self.request)
         commands = {
             "publish": "publish",
             "disable": "disable",
@@ -93,11 +95,12 @@ class SecurityPolicyService(Service):
         except PolicyRevisionError:
             return self._error(412, "revision-mismatch", "The policy changed; reload and retry.")
         except PolicyCommandError as exc:
-            result = self._error(400, "validation-failed", str(exc))
-            result["diagnostics"] = exc.diagnostics
+            message = localize_message(exc.message, self.request)
+            result = self._error(400, "validation-failed", message)
+            result["diagnostics"] = localize_diagnostics(exc.diagnostics, self.request)
             return result
         self.request.response.setHeader("ETag", f'"{state["revision"]}"')
-        return state
+        return localize_diagnostics(state, self.request)
 
     def _body(self):
         value = getattr(self.request, "json", None)

@@ -1,5 +1,6 @@
 """Tests for security-policy REST API service."""
 
+import json
 from datetime import datetime
 from datetime import timezone
 
@@ -120,3 +121,20 @@ def test_preview_is_side_effect_free_and_not_cacheable():
     assert result["preview"].startswith("Contact: ")
     assert instance.application.inspect()["revision"] == "1"
     assert request.response.headers["Cache-Control"] == "no-store"
+
+
+def test_command_failure_returns_interpolated_diagnostics():
+    """Validation failures serialize as plain text, not raw message ids."""
+    request = DummyRequest(
+        body={"values": {"contact": ["not a uri"]}},
+        **{"If-Match": '"1"'},
+    )
+    instance = service(request, ("publish",))
+
+    result = instance.POST()
+
+    assert request.response.status == 400
+    assert result["error"]["message"] == "The Security Policy contains invalid values"
+    messages = {item["code"]: item["message"] for item in result["diagnostics"]["errors"]}
+    assert messages["contact.uri"] == ("Value 1 must be an absolute URI; web URIs must use HTTPS.")
+    assert json.dumps(result)

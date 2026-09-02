@@ -16,6 +16,9 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from persistent.mapping import PersistentMapping
+from zope.i18n import translate
+
+from plone.securitytxt.i18n import _
 
 
 ANNOTATION_KEY = "plone.securitytxt.security-policy"
@@ -45,7 +48,7 @@ URI_FIELDS = {
     "policy",
     "hiring",
 }
-FIRST_CLASS_NAMES = {label.casefold() for _, label in FIELD_ORDER}
+FIRST_CLASS_NAMES = {label.casefold() for _name, label in FIELD_ORDER}
 FIELD_NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9-]*$")
 SCHEME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*$")
 LANGUAGE_RE = re.compile(
@@ -65,7 +68,15 @@ LANGUAGE_RE = re.compile(
 
 
 class PolicyError(Exception):
-    """Base class for stable management errors."""
+    """Base class for stable management errors.
+
+    ``message`` keeps the translatable Message so adapters can render it in the
+    caller's language; ``str(exc)`` stays the stable English msgid for logs.
+    """
+
+    def __init__(self, message, *args):
+        super().__init__(message, *args)
+        self.message = message
 
 
 class PolicyPermissionError(PolicyError):
@@ -125,7 +136,36 @@ def new_record() -> PersistentMapping:
 
 
 def _diagnostic(code: str, field: str, message: str) -> dict[str, str]:
+    """Build one diagnostic; ``message`` is a translatable, human-facing Message."""
     return {"code": code, "field": field, "message": message}
+
+
+def localize_diagnostics(payload: dict[str, Any], context: Any = None) -> dict[str, Any]:
+    """Return ``payload`` with diagnostic messages rendered as plain text.
+
+    Adapters call this at their own boundary so the application module stays
+    request-free: the control panel renders the visitor's language, and the REST
+    service emits interpolated strings that survive JSON serialization.
+    """
+    localized = dict(payload)
+    for key in ("errors", "blockers", "warnings"):
+        rows = localized.get(key)
+        if rows is None:
+            continue
+        localized[key] = [
+            {**row, "message": localize_message(row["message"], context)} for row in rows
+        ]
+    return localized
+
+
+def localize_message(message: Any, context: Any = None) -> str:
+    """Render one translatable Message as plain text for ``context``."""
+    try:
+        return translate(message, context=context)
+    except TypeError:
+        # Contexts that cannot negotiate a language (scripts, test doubles) still
+        # deserve interpolated English rather than a raw msgid.
+        return translate(message)
 
 
 def _has_control_characters(value: str) -> bool:
@@ -228,7 +268,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
             continue
         normalized = _normalize_list(raw.get(field, []))
         if normalized is None:
-            errors.append(_diagnostic(f"{field}.type", field, "Expected an ordered list."))
+            errors.append(_diagnostic(f"{field}.type", field, _("Expected an ordered list.")))
             normalized = []
         values[field] = normalized
 
@@ -236,7 +276,11 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
     expiry = _parse_expiry(expiry_raw)
     if expiry_raw not in (None, "") and expiry is None:
         errors.append(
-            _diagnostic("expires.invalid", "expires", "Use an ISO 8601 instant with a timezone.")
+            _diagnostic(
+                "expires.invalid",
+                "expires",
+                _("Use an ISO 8601 instant with a timezone."),
+            )
         )
     values["expires"] = _format_expiry(expiry) if expiry else None
 
@@ -247,7 +291,10 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                     _diagnostic(
                         f"{field}.uri",
                         field,
-                        f"Value {index + 1} must be an absolute URI; web URIs must use HTTPS.",
+                        _(
+                            "Value ${index} must be an absolute URI; web URIs must use HTTPS.",
+                            mapping={"index": index + 1},
+                        ),
                     )
                 )
 
@@ -269,8 +316,10 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                 _diagnostic(
                     "canonical.invalid",
                     "canonical",
-                    "Canonical URLs must be credential-free HTTPS well-known URLs "
-                    "without query or fragment.",
+                    _(
+                        "Canonical URLs must be credential-free HTTPS well-known URLs "
+                        "without query or fragment."
+                    ),
                 )
             )
 
@@ -282,7 +331,10 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                 _diagnostic(
                     "preferred_languages.invalid",
                     "preferred_languages",
-                    f"{tag!r} is not a supported BCP 47 language tag.",
+                    _(
+                        "${tag} is not a supported BCP 47 language tag.",
+                        mapping={"tag": repr(tag)},
+                    ),
                 )
             )
         elif folded in seen_languages:
@@ -290,7 +342,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                 _diagnostic(
                     "preferred_languages.duplicate",
                     "preferred_languages",
-                    f"Duplicate language tag: {tag}.",
+                    _("Duplicate language tag: ${tag}.", mapping={"tag": tag}),
                 )
             )
         seen_languages.add(folded)
@@ -298,7 +350,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
     extensions = raw.get("extensions", []) or []
     if not isinstance(extensions, (list, tuple)):
         errors.append(
-            _diagnostic("extensions.type", "extensions", "Expected ordered name/value rows.")
+            _diagnostic("extensions.type", "extensions", _("Expected ordered name/value rows."))
         )
         extensions = []
     normalized_extensions: list[dict[str, str]] = []
@@ -308,7 +360,9 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
         if not isinstance(row, dict):
             errors.append(
                 _diagnostic(
-                    "extension.type", "extensions", "Each extension must have a name and value."
+                    "extension.type",
+                    "extensions",
+                    _("Each extension must have a name and value."),
                 )
             )
             continue
@@ -316,25 +370,42 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
         value = row.get("value", "")
         if not isinstance(name, str) or not FIELD_NAME_RE.fullmatch(name):
             errors.append(
-                _diagnostic("extension.name", "extensions", "Extension field names are invalid.")
+                _diagnostic(
+                    "extension.name",
+                    "extensions",
+                    _("Extension field names are invalid."),
+                )
             )
             continue
         folded_name = name.casefold()
         if folded_name in FIRST_CLASS_NAMES:
             errors.append(
-                _diagnostic("extension.collision", "extensions", f"{name} is a first-class field.")
+                _diagnostic(
+                    "extension.collision",
+                    "extensions",
+                    _("${name} is a first-class field.", mapping={"name": name}),
+                )
             )
         if not isinstance(value, str) or not value or _has_control_characters(value):
             errors.append(
                 _diagnostic(
-                    "extension.value", "extensions", f"{name} needs a nonempty single-line value."
+                    "extension.value",
+                    "extensions",
+                    _(
+                        "${name} needs a nonempty single-line value.",
+                        mapping={"name": name},
+                    ),
                 )
             )
             value = value if isinstance(value, str) else ""
         key = (folded_name, value)
         if key in seen_extensions:
             errors.append(
-                _diagnostic("extension.duplicate", "extensions", f"Duplicate {name} value.")
+                _diagnostic(
+                    "extension.duplicate",
+                    "extensions",
+                    _("Duplicate ${name} value.", mapping={"name": name}),
+                )
             )
         seen_extensions.add(key)
         counts[folded_name] = counts.get(folded_name, 0) + 1
@@ -342,12 +413,18 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
             not _absolute_uri(value) or urlsplit(value).scheme.casefold() != "https"
         ):
             errors.append(
-                _diagnostic("extension.csaf-uri", "extensions", "CSAF must contain an HTTPS URI.")
+                _diagnostic(
+                    "extension.csaf-uri",
+                    "extensions",
+                    _("CSAF must contain an HTTPS URI."),
+                )
             )
         elif folded_name == "bug-bounty" and value not in {"True", "False"}:
             errors.append(
                 _diagnostic(
-                    "extension.bug-bounty", "extensions", "Bug-Bounty must be True or False."
+                    "extension.bug-bounty",
+                    "extensions",
+                    _("Bug-Bounty must be True or False."),
                 )
             )
         elif folded_name not in {"csaf", "bug-bounty"}:
@@ -355,13 +432,20 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                 _diagnostic(
                     "extension.unknown",
                     "extensions",
-                    f"{name} is not in this release's IANA snapshot.",
+                    _(
+                        "${name} is not in this release's IANA snapshot.",
+                        mapping={"name": name},
+                    ),
                 )
             )
         normalized_extensions.append({"name": name, "value": value})
     if counts.get("bug-bounty", 0) > 1:
         errors.append(
-            _diagnostic("extension.singleton", "extensions", "Bug-Bounty may occur at most once.")
+            _diagnostic(
+                "extension.singleton",
+                "extensions",
+                _("Bug-Bounty may occur at most once."),
+            )
         )
     values["extensions"] = normalized_extensions
 
@@ -369,7 +453,9 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
     if mode not in {"unsigned", "signed"}:
         errors.append(
             _diagnostic(
-                "publication_mode.invalid", "publication_mode", "Use unsigned or signed mode."
+                "publication_mode.invalid",
+                "publication_mode",
+                _("Use unsigned or signed mode."),
             )
         )
         mode = "unsigned"
@@ -378,7 +464,9 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
     if profile is not None and (not isinstance(profile, str) or not profile.strip()):
         errors.append(
             _diagnostic(
-                "signing_profile.invalid", "signing_profile", "Select a valid Signing Profile."
+                "signing_profile.invalid",
+                "signing_profile",
+                _("Select a valid Signing Profile."),
             )
         )
         profile = None
@@ -386,30 +474,34 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
 
     if not values["contact"]:
         blockers.append(
-            _diagnostic("contact.required", "contact", "At least one Contact is required.")
+            _diagnostic("contact.required", "contact", _("At least one Contact is required."))
         )
     if expiry is None:
-        blockers.append(_diagnostic("expires.required", "expires", "Expires is required."))
+        blockers.append(_diagnostic("expires.required", "expires", _("Expires is required.")))
     elif expiry <= now:
-        blockers.append(_diagnostic("expires.future", "expires", "Expires must be in the future."))
+        blockers.append(
+            _diagnostic("expires.future", "expires", _("Expires must be in the future."))
+        )
     else:
         seconds = (expiry - now).total_seconds()
         if seconds <= WARNING_WINDOW_SECONDS:
             warnings.append(
-                _diagnostic("expires.soon", "expires", "The policy expires within 30 days.")
+                _diagnostic("expires.soon", "expires", _("The policy expires within 30 days."))
             )
         if seconds > 366 * 24 * 60 * 60:
             warnings.append(
                 _diagnostic(
-                    "expires.over-year", "expires", "The expiry is more than one year away."
+                    "expires.over-year",
+                    "expires",
+                    _("The expiry is more than one year away."),
                 )
             )
     if not values["canonical"]:
         warnings.append(
-            _diagnostic("canonical.recommended", "canonical", "Canonical is recommended.")
+            _diagnostic("canonical.recommended", "canonical", _("Canonical is recommended."))
         )
     if not values["policy"]:
-        warnings.append(_diagnostic("policy.recommended", "policy", "Policy is recommended."))
+        warnings.append(_diagnostic("policy.recommended", "policy", _("Policy is recommended.")))
     if (
         any(value.casefold().startswith("mailto:") for value in values["contact"])
         and not values["encryption"]
@@ -418,7 +510,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
             _diagnostic(
                 "encryption.recommended",
                 "encryption",
-                "Encryption is recommended for email contacts.",
+                _("Encryption is recommended for email contacts."),
             )
         )
     if mode == "signed":
@@ -427,7 +519,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                 _diagnostic(
                     "canonical.signing-required",
                     "canonical",
-                    "Signed publication requires Canonical.",
+                    _("Signed publication requires Canonical."),
                 )
             )
         if not profile:
@@ -435,7 +527,7 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
                 _diagnostic(
                     "signing_profile.required",
                     "signing_profile",
-                    "Signed publication requires a Signing Profile.",
+                    _("Signed publication requires a Signing Profile."),
                 )
             )
 
@@ -446,17 +538,23 @@ def validate_policy(  # noqa: C901 - one pass preserves ordered cross-field diag
         if len(preview) > MAX_UNSIGNED_BYTES:
             blockers.append(
                 _diagnostic(
-                    "representation.size", "", "The unsigned representation exceeds 32 KiB."
+                    "representation.size",
+                    "",
+                    _("The unsigned representation exceeds 32 KiB."),
                 )
             )
         if len(lines) > MAX_LINES:
             blockers.append(
-                _diagnostic("representation.lines", "", "The representation exceeds 1,000 lines.")
+                _diagnostic(
+                    "representation.lines", "", _("The representation exceeds 1,000 lines.")
+                )
             )
         if any(len(line) > MAX_LINE_CHARACTERS for line in lines):
             blockers.append(
                 _diagnostic(
-                    "representation.line-length", "", "A generated line exceeds 2,048 characters."
+                    "representation.line-length",
+                    "",
+                    _("A generated line exceeds 2,048 characters."),
                 )
             )
 
@@ -555,7 +653,7 @@ class SecurityPolicyApplication:
         if self.site is None or not getSecurityManager().checkPermission(
             MANAGE_PERMISSION, self.site
         ):
-            raise PolicyPermissionError("Security Policy management is not permitted")
+            raise PolicyPermissionError(_("Security Policy management is not permitted"))
 
     def evaluate(self, candidate: dict[str, Any] | None, *, preview: bool = True) -> dict[str, Any]:
         self._authorize()
@@ -623,7 +721,7 @@ class SecurityPolicyApplication:
         if expected_revision is None or str(expected_revision).strip('"') != str(
             self.record["revision"]
         ):
-            raise PolicyRevisionError("The Security Policy revision is stale")
+            raise PolicyRevisionError(_("The Security Policy revision is stale"))
 
         if command == "test-signing":
             return self._execute_signing_test(candidate)
@@ -634,14 +732,16 @@ class SecurityPolicyApplication:
             return self._inspect_authorized()
 
         if command not in {"save", "publish"}:
-            raise PolicyCommandError(f"Unknown command: {command}")
+            raise PolicyCommandError(_("Unknown command: ${command}", mapping={"command": command}))
 
         if candidate is None:
             values = deepcopy(dict(self.record["values"]))
         else:
             evaluated = validate_policy(candidate, now=self.clock())
             if evaluated["errors"]:
-                raise PolicyCommandError("The Security Policy contains invalid values", evaluated)
+                raise PolicyCommandError(
+                    _("The Security Policy contains invalid values"), evaluated
+                )
             values = evaluated["values"]
 
         evaluated = validate_policy(values, now=self.clock())
@@ -649,7 +749,7 @@ class SecurityPolicyApplication:
         enabling = command == "publish"
         remains_enabled = bool(self.record["publication_enabled"]) or enabling
         if remains_enabled and (evaluated["errors"] or evaluated["blockers"]):
-            raise PolicyCommandError("The Security Policy cannot be published", evaluated)
+            raise PolicyCommandError(_("The Security Policy cannot be published"), evaluated)
 
         artifact = self.record["artifact"]
         binding = deepcopy(dict(self.record["artifact_binding"]))
@@ -684,21 +784,21 @@ class SecurityPolicyApplication:
             diagnostic = _diagnostic(
                 "signing_profile.unavailable",
                 "signing_profile",
-                "Signed Publication Mode requires an available Signing Profile.",
+                _("Signed Publication Mode requires an available Signing Profile."),
             )
             raise PolicyCommandError(
-                "The selected Signing Profile is unavailable",
+                _("The selected Signing Profile is unavailable"),
                 {"errors": [diagnostic], "blockers": [], "warnings": []},
             )
 
     def _execute_signing_test(self, candidate):
         signer = self._get_signer()
         if signer is None:
-            raise PolicyCommandError("Signing support is unavailable")
+            raise PolicyCommandError(_("Signing support is unavailable"))
         try:
             status = signer.test(candidate or dict(self.record["values"]))
         except Exception as exc:
-            raise PolicyCommandError("Signing capability test failed") from exc
+            raise PolicyCommandError(_("Signing capability test failed")) from exc
         self.record["signing_status"] = PersistentMapping(status)
         self.record["revision"] += 1
         return self._inspect_authorized()
@@ -718,7 +818,7 @@ class SecurityPolicyApplication:
         else:
             signer = self._get_signer()
             if signer is None:
-                raise PolicyCommandError("Signing support is unavailable")
+                raise PolicyCommandError(_("Signing support is unavailable"))
             try:
                 artifact, signer_binding = signer.sign_and_verify(
                     unsigned,
@@ -726,11 +826,11 @@ class SecurityPolicyApplication:
                     expires=values["expires"],
                 )
             except Exception as exc:
-                raise PolicyCommandError("Signing failed") from exc
+                raise PolicyCommandError(_("Signing failed")) from exc
             binding.update(signer_binding)
             binding["profile_id"] = values["signing_profile"]
             if len(artifact) > MAX_SIGNED_BYTES:
-                raise PolicyCommandError("The signed artifact exceeds 64 KiB")
+                raise PolicyCommandError(_("The signed artifact exceeds 64 KiB"))
         binding["artifact_hash"] = sha256(artifact).hexdigest()
         return artifact, binding
 

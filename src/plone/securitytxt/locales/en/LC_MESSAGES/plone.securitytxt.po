@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.securitytxt\n"
-"POT-Creation-Date: 2026-08-13 17:07+0000\n"
+"POT-Creation-Date: 2026-09-02 20:29+0000\n"
 "PO-Revision-Date: 2026-08-13 17:05+0000\n"
 "Last-Translator: Maik Derstappen <md@derico.de>\n"
 "Language-Team: Plone <dev@plone.org>\n"
@@ -14,335 +14,503 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone.securitytxt\n"
 
-#: ../../securitytxt/controlpanels/security_policy.py:334
+#: ../controlpanels/security_policy.py:342
 msgid "${errors} errors, ${blockers} publication blockers, ${warnings} warnings."
 msgstr ""
 
-#: ../../securitytxt/configure.zcml:27
+#: ../policy.py:386
+msgid "${name} is a first-class field."
+msgstr ""
+
+#: ../policy.py:435
+msgid "${name} is not in this release's IANA snapshot."
+msgstr ""
+
+#: ../policy.py:394
+msgid "${name} needs a nonempty single-line value."
+msgstr ""
+
+#: ../policy.py:334
+msgid "${tag} is not a supported BCP 47 language tag."
+msgstr ""
+
+#: ../configure.zcml:27
 msgid "A Plone addon to generate and provide a security.txt for the Plone website."
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:112
+#: ../policy.py:557
+msgid "A generated line exceeds 2,048 characters."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:113
 msgid "Acknowledgments"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:117
+#: ../controlpanels/security_policy.py:118
 msgid "Acknowledgments URI"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:56
+#: ../policy.py:477
+msgid "At least one Contact is required."
+msgstr ""
+
+#: ../controlpanels/security_policy.pt:56
 msgid "Blocks publication:"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:52
+#: ../controlpanels/security_policy.pt:52
 msgid "Blocks saving:"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:96
+#: ../policy.py:447
+msgid "Bug-Bounty may occur at most once."
+msgstr ""
+
+#: ../policy.py:427
+msgid "Bug-Bounty must be True or False."
+msgstr ""
+
+#: ../policy.py:419
+msgid "CSAF must contain an HTTPS URI."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:97
 msgid "Canonical"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:102
+#: ../controlpanels/security_policy.py:103
 msgid "Canonical HTTPS URL"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:145
+#: ../policy.py:319
+msgid "Canonical URLs must be credential-free HTTPS well-known URLs without query or fragment."
+msgstr ""
+
+#: ../policy.py:501
+msgid "Canonical is recommended."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:146
 msgid "Choose unsigned output or output signed by a configured profile."
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:88
+#: ../controlpanels/security_policy.py:89
 msgid "Comma-separated BCP 47 language tags, in preference order. Common values: en (English), de (German), de-CH (German as used in Switzerland), or fr (French). Example: en, de-CH"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:41
+#: ../controlpanels/security_policy.py:42
 msgid "Configured"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:71
+#: ../controlpanels/security_policy.py:72
 msgid "Contact"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:51
+#: ../controlpanels/security_policy.py:52
 msgid "Contact & expiry"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:76
+#: ../controlpanels/security_policy.py:77
 msgid "Contact URI"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:152
+#: ../controlpanels/security_policy.py:153
 msgid "Deployment-owned profile identifier. Example: production-security-key"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:322
+#: ../controlpanels/security_policy.py:330
 msgid "Disable publication"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:213
+#: ../controlpanels/security_policy.py:217
 msgid "Disable publication and return 404 to anonymous clients?"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:56
+#: ../controlpanels/security_policy.py:57
 msgid "Disclosure"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:35
+#: ../controlpanels/security_policy.py:36
 msgid "Draft"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:106
+#: ../policy.py:407
+msgid "Duplicate ${name} value."
+msgstr ""
+
+#: ../policy.py:345
+msgid "Duplicate language tag: ${tag}."
+msgstr ""
+
+#: ../policy.py:365
+msgid "Each extension must have a name and value."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:107
 msgid "Encryption"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:108
+#: ../controlpanels/security_policy.py:109
 msgid "Encryption URI"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:27
+#: ../policy.py:513
+msgid "Encryption is recommended for email contacts."
+msgstr ""
+
+#: ../controlpanels/security_policy.pt:27
 msgid "Endpoint URL"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:25
+#: ../controlpanels/security_policy.pt:25
 msgid "Endpoint status"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:80
+#: ../policy.py:271
+msgid "Expected an ordered list."
+msgstr ""
+
+#: ../policy.py:353
+msgid "Expected ordered name/value rows."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:81
 msgid "Expires"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:140
+#: ../policy.py:480
+msgid "Expires is required."
+msgstr ""
+
+#: ../policy.py:483
+msgid "Expires must be in the future."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:141
 msgid "Extension field"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:61
+#: ../policy.py:376
+msgid "Extension field names are invalid."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:62
 msgid "Extension fields"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:71
+#: ../controlpanels/security_policy.pt:71
 msgid "Generated unsigned preview"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:129
+#: ../controlpanels/security_policy.py:130
 msgid "Hiring"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:131
+#: ../controlpanels/security_policy.py:132
 msgid "Hiring URI"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:23
+#: ../controlpanels/security_policy.pt:23
 msgid "Lifecycle"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:165
+#: ../controlpanels/security_policy.py:166
 msgid "Manage the site-wide security.txt policy"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:179
+#: ../controlpanels/security_policy.py:183
 msgid "Not set"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:136
+#: ../controlpanels/security_policy.py:137
 msgid "One Field-Name: value row per line. Examples: Bug-Bounty: True or CSAF: https://example.com/.well-known/csaf/provider-metadata.json"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:113
+#: ../controlpanels/security_policy.py:114
 msgid "One acknowledgments URI per line. Example: https://example.com/security/acknowledgments"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:72
+#: ../controlpanels/security_policy.py:73
 msgid "One contact URI per line, in preference order. Examples: mailto:security@example.com or https://example.com/security/contact"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:107
+#: ../controlpanels/security_policy.py:108
 msgid "One encryption-key URI per line. Example: https://example.com/pgp-key.txt"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:130
+#: ../controlpanels/security_policy.py:131
 msgid "One security-jobs URI per line. Example: https://example.com/security/jobs"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:122
+#: ../controlpanels/security_policy.py:123
 msgid "One security-policy URI per line. Example: https://example.com/security/policy"
 msgstr ""
 
-#: ../../securitytxt/configure.zcml:27
+#: ../configure.zcml:27
 msgid "Plone security.txt"
 msgstr ""
 
-#: ../../securitytxt/configure.zcml:36
+#: ../configure.zcml:36
 msgid "Plone security.txt (uninstall)"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:121
+#: ../controlpanels/security_policy.py:122
 msgid "Policy"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:125
+#: ../controlpanels/security_policy.py:126
 msgid "Policy URI"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:87
+#: ../policy.py:504
+msgid "Policy is recommended."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:88
 msgid "Preferred languages"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:305
+#: ../controlpanels/security_policy.py:311
 msgid "Preview"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:37
+#: ../controlpanels/security_policy.pt:37
 msgid "Primary fingerprint"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:37
+#: ../controlpanels/security_policy.py:38
 msgid "Publication blocked"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:144
+#: ../controlpanels/security_policy.py:145
 msgid "Publication mode"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:18
+#: ../controlpanels/security_policy.pt:18
 msgid "Publication summary"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:315
+#: ../controlpanels/security_policy.py:323
 msgid "Publish"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:225
+#: ../controlpanels/security_policy.py:229
 msgid "Publish at ${url} in ${mode} mode until ${expiry}?"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:36
+#: ../controlpanels/security_policy.py:37
 msgid "Published"
 msgstr ""
 
-#: ../../securitytxt/viewlets/security_policy_warning.pt:9
+#: ../viewlets/security_policy_warning.pt:9
 msgid "Review policy"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:208
+#: ../controlpanels/security_policy.py:212
 msgid "Save changes"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:208
+#: ../controlpanels/security_policy.py:212
 msgid "Save draft"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:32
+#: ../controlpanels/security_policy.pt:32
 msgid "Seconds to expiry"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:164
-#: ../../securitytxt/profiles/default/controlpanel.xml
+#: ../controlpanels/security_policy.py:165
+#: ../profiles/default/controlpanel.xml
 msgid "Security Policy"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:288
+#: ../policy.py:656
+msgid "Security Policy management is not permitted"
+msgstr ""
+
+#: ../controlpanels/security_policy.py:292
 msgid "Security Policy updated."
 msgstr ""
 
-#: ../../securitytxt/viewlets/security_policy_warning.pt:7
+#: ../viewlets/security_policy_warning.pt:7
 msgid "Security Policy:"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:81
+#: ../policy.py:469
+msgid "Select a valid Signing Profile."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:82
 msgid "Select the expiration date and time. Example: December 31, 2027 at 23:59 UTC"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:32
+#: ../controlpanels/security_policy.py:33
 msgid "Signed"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:72
+#: ../controlpanels/security_policy.pt:72
 msgid "Signed Publication Mode is selected. This non-public preview remains unsigned."
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:66
+#: ../policy.py:787
+msgid "Signed Publication Mode requires an available Signing Profile."
+msgstr ""
+
+#: ../policy.py:522
+msgid "Signed publication requires Canonical."
+msgstr ""
+
+#: ../policy.py:530
+msgid "Signed publication requires a Signing Profile."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:67
 msgid "Signing"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:151
+#: ../controlpanels/security_policy.py:152
 msgid "Signing Profile"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:34
+#: ../controlpanels/security_policy.pt:34
 msgid "Signing capability"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:39
+#: ../policy.py:801
+msgid "Signing capability test failed"
+msgstr ""
+
+#: ../policy.py:829
+msgid "Signing failed"
+msgstr ""
+
+#: ../controlpanels/security_policy.pt:39
 msgid "Signing subkey fingerprint"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:326
+#: ../policy.py:797
+msgid "Signing support is unavailable"
+msgstr ""
+
+#: ../controlpanels/security_policy.py:334
 msgid "Test signing"
 msgstr ""
 
-#: ../../securitytxt/viewlets/security_policy_warning.py:26
+#: ../policy.py:752
+msgid "The Security Policy cannot be published"
+msgstr ""
+
+#: ../policy.py:743
+msgid "The Security Policy contains invalid values"
+msgstr ""
+
+#: ../viewlets/security_policy_warning.py:26
 msgid "The Security Policy expires in ${days} days."
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:193
+#: ../policy.py:724
+msgid "The Security Policy revision is stale"
+msgstr ""
+
+#: ../policy.py:496
+msgid "The expiry is more than one year away."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:197
 msgid "The official URL where this security.txt is published must use HTTPS. Canonical requires a public HTTPS URL, but this site is currently using HTTP: ${url}. Leave Canonical blank for unsigned local testing, or configure public HTTPS first."
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:186
+#: ../controlpanels/security_policy.py:190
 msgid "The official URL where this security.txt is published. Enter one HTTPS URL per line; each must end with /.well-known/security.txt and have no query or fragment. Copy this site's URL: ${url}"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:97
+#: ../controlpanels/security_policy.py:98
 msgid "The official URL where this security.txt is published. Enter one HTTPS URL per line; each must end with /.well-known/security.txt and have no query or fragment. Usually use your site's own URL."
 msgstr ""
 
-#: ../../securitytxt/viewlets/security_policy_warning.py:23
+#: ../policy.py:489
+msgid "The policy expires within 30 days."
+msgstr ""
+
+#: ../viewlets/security_policy_warning.py:23
 msgid "The published Security Policy has expired."
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:40
+#: ../policy.py:549
+msgid "The representation exceeds 1,000 lines."
+msgstr ""
+
+#: ../policy.py:790
+msgid "The selected Signing Profile is unavailable"
+msgstr ""
+
+#: ../policy.py:833
+msgid "The signed artifact exceeds 64 KiB"
+msgstr ""
+
+#: ../policy.py:543
+msgid "The unsigned representation exceeds 32 KiB."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:41
 msgid "Unavailable"
 msgstr ""
 
-#: ../../securitytxt/configure.zcml:36
+#: ../configure.zcml:36
 msgid "Uninstalls plone.securitytxt"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:31
+#: ../policy.py:735
+msgid "Unknown command: ${command}"
+msgstr ""
+
+#: ../controlpanels/security_policy.py:32
 msgid "Unsigned"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:68
+#: ../controlpanels/security_policy.pt:68
 msgid "Unsigned preview"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:297
+#: ../policy.py:282
+msgid "Use an ISO 8601 instant with a timezone."
+msgstr ""
+
+#: ../policy.py:458
+msgid "Use unsigned or signed mode."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:301
 msgid "Validate"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:49
+#: ../controlpanels/security_policy.pt:49
 msgid "Validation"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:45
+#: ../controlpanels/security_policy.pt:45
 msgid "Validation summary"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:42
+#: ../policy.py:294
+msgid "Value ${index} must be an absolute URI; web URIs must use HTTPS."
+msgstr ""
+
+#: ../controlpanels/security_policy.py:43
 msgid "Verified"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.pt:60
+#: ../controlpanels/security_policy.pt:60
 msgid "Warning:"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:223
+#: ../controlpanels/security_policy.py:227
 msgid "signed"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:221
+#: ../controlpanels/security_policy.py:225
 msgid "the selected expiry"
 msgstr ""
 
-#: ../../securitytxt/controlpanels/security_policy.py:223
+#: ../controlpanels/security_policy.py:227
 msgid "unsigned"
 msgstr ""
