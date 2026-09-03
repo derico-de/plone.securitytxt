@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0b2 (unreleased)
+
+
+- Nothing changed yet.
+
+
 ## 1.0.0b1 (2026-09-03)
 
 - Add the site-wide Security Policy control panel, dedicated REST API, expiry warning,
