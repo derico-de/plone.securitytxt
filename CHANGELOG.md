@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0a1 (unreleased)
+## 1.0.0b1 (2026-09-03)
 
 - Add the site-wide Security Policy control panel, dedicated REST API, expiry warning,
   and RFC 9116 `/.well-known/security.txt` endpoint.
