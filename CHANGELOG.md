@@ -1,7 +1,6 @@
 # Changelog
 
-## 1.0.0b2 (unreleased)
-
+## 1.0.0b2 (2026-09-13)
 
 - Drop the `setuptools<81` upper bound inherited from the package template. The cap
   guarded against the removal of `pkg_resources` in setuptools 82, which this stack no
