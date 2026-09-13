@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0b3 (unreleased)
+
+
+- Nothing changed yet.
+
+
 ## 1.0.0b2 (2026-09-13)
 
 - Drop the `setuptools<81` upper bound inherited from the package template. The cap
