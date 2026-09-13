@@ -93,7 +93,7 @@ def main() -> int:
             keyid=f"{fingerprint}!",
             clearsign=True,
             detach=False,
-            digest_algo="SHA256",
+            extra_args=["--digest-algo", "SHA256"],
         )
         artifact = bytes(signed.data)
         if not signed or not artifact or len(artifact) > MAX_ARTIFACT:

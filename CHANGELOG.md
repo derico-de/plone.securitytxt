@@ -3,7 +3,14 @@
 ## 1.0.0b3 (unreleased)
 
 
-- Nothing changed yet.
+- Fix signing against real GnuPG. The helper passed `digest_algo="SHA256"` to
+  `python-gnupg`, which has no such parameter, so every signing attempt raised a
+  `TypeError` inside the helper and surfaced as a generic signing failure. The digest is
+  now selected with `--digest-algo SHA256`; verified end to end against GnuPG 2.4.7 and
+  python-gnupg 0.5.6, including the `VALIDSIG` SHA-256 check.
+- Rewrite the signing guide as a step-by-step procedure for site administrators: key
+  creation commands, configuration file walkthrough, control-panel steps, outside
+  verification, rotation and renewal, and a troubleshooting table.
 
 
 ## 1.0.0b2 (2026-09-13)
