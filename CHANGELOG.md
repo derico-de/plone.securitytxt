@@ -3,7 +3,10 @@
 ## 1.0.0b2 (unreleased)
 
 
-- Nothing changed yet.
+- Drop the `setuptools<81` upper bound inherited from the package template. The cap
+  guarded against the removal of `pkg_resources` in setuptools 82, which this stack no
+  longer needs: Plone 6.2 uses native PEP 420 namespace packages and the remaining
+  `pkg_resources` imports in the dependency tree are guarded or test-only.
 
 
 ## 1.0.0b1 (2026-09-03)
