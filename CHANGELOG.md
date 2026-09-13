@@ -7,6 +7,13 @@
   guarded against the removal of `pkg_resources` in setuptools 82, which this stack no
   longer needs: Plone 6.2 uses native PEP 420 namespace packages and the remaining
   `pkg_resources` imports in the dependency tree are guarded or test-only.
+- Stop shipping internal working files in the sdist. The default hatchling file
+  selection swept in agent transcripts, scratch notes, copier answers and the local
+  Zope instance config; the sdist is now an explicit allow-list and drops from 1.8 MB
+  to 44 KB.
+- Ship the compiled translation catalogs. `.gitignore` excludes `*.mo` and hatchling
+  honours it, so the German catalog was missing from every release so far and the
+  translations never took effect in an installed site.
 
 
 ## 1.0.0b1 (2026-09-03)
