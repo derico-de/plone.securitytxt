@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0b3 (unreleased)
+## 1.0.0b3 (2026-09-20)
 
 
 - Prevent the Security Policy expiry-warning viewlet from breaking page rendering for
