@@ -48,6 +48,26 @@ class TestViewletSecurityPolicyWarning:
         viewlet.update()
         viewlet.render()
 
+    def test_viewlet_update_for_user_without_manage_permission(self):
+        """The warning must not break rendering for unauthorized users."""
+        from AccessControl import getSecurityManager
+
+        from plone.securitytxt.policy import MANAGE_PERMISSION
+
+        setRoles(self.portal, TEST_USER_ID, ["Member"])
+        assert not getSecurityManager().checkPermission(MANAGE_PERMISSION, self.portal)
+        request, view, manager = self._portal_header_manager()
+        viewlet = queryMultiAdapter(
+            (self.portal, request, view, manager),
+            IViewlet,
+            name="securitypolicywarning",
+        )
+        assert viewlet is not None
+
+        viewlet.update()
+
+        assert viewlet.available is False
+
     def test_viewlet_not_registered_without_addon_browser_layer(self):
         """The viewlet must not run on a new site before add-on install."""
         request, view, manager = self._portal_header_manager(BrowserTestRequest())

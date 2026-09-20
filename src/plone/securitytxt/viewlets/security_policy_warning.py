@@ -5,6 +5,7 @@ from zope.component.hooks import getSite
 
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.securitytxt.i18n import _
+from plone.securitytxt.policy import PolicyPermissionError
 from plone.securitytxt.policy import SecurityPolicyApplication
 
 
@@ -16,7 +17,11 @@ class SecurityPolicyWarning(ViewletBase):
     def update(self):
         super().update()
         site = getSite()
-        self.state = SecurityPolicyApplication(site).inspect()
+        try:
+            self.state = SecurityPolicyApplication(site).inspect()
+        except PolicyPermissionError:
+            self.available = False
+            return
         self.available = self.state["show_expiry_warning"]
         seconds = self.state["expiry_seconds"]
         if seconds is None or seconds <= 0:

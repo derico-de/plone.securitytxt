@@ -3,6 +3,10 @@
 ## 1.0.0b3 (unreleased)
 
 
+- Prevent the Security Policy expiry-warning viewlet from breaking page rendering for
+  users who do not have permission to manage the site-wide policy. The warning is now
+  hidden for those users instead of leaking a `PolicyPermissionError` through the
+  portal header.
 - Fix signing against real GnuPG. The helper passed `digest_algo="SHA256"` to
   `python-gnupg`, which has no such parameter, so every signing attempt raised a
   `TypeError` inside the helper and surfaced as a generic signing failure. The digest is
